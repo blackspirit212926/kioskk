@@ -72,7 +72,7 @@ function CataloguePage() {
     if (search.origine) {
       list.push({
         key: "origine",
-        label: search.origine === "CN" ? "🇨🇳 Chine" : "🇦🇪 Dubaï",
+        label: search.origine === "CN" ? "Chine" : "Dubaï",
         onRemove: () => navigate({ search: (s: any) => ({ ...s, origine: undefined }) }),
       });
     }
@@ -237,8 +237,8 @@ function FiltersPanel({
         <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground mb-3">Origine</h3>
         <div className="space-y-2">
           {[
-            { code: "CN", label: "Chine", flag: "🇨🇳" },
-            { code: "AE", label: "Dubaï", flag: "🇦🇪" },
+            { code: "CN", label: "Chine", flag: "CN" },
+            { code: "AE", label: "Dubaï", flag: "AE" },
           ].map((o) => {
             const active = search.origine === o.code;
             return (
