@@ -37,7 +37,7 @@ export function formatCompact(n: number): string {
 }
 
 export function originLabel(code: "CN" | "AE"): { label: string; flag: string } {
-  return code === "CN" ? { label: "Chine", flag: "🇨🇳" } : { label: "Dubaï", flag: "🇦🇪" };
+  return code === "CN" ? { label: "Chine", flag: "CN" } : { label: "Dubaï", flag: "AE" };
 }
 
 export function deliveryLabel(minDays: number, maxDays: number, mode: "sea" | "air"): string {
