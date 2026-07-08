@@ -73,7 +73,7 @@ function CataloguePage() {
       list.push({
         key: "origine",
         label: search.origine === "CN" ? "🇨🇳 Chine" : "🇦🇪 Dubaï",
-        onRemove: () => navigate({ search: (s) => ({ ...s, origine: undefined }) }),
+        onRemove: () => navigate({ search: (s: any) => ({ ...s, origine: undefined }) }),
       });
     }
     if (search.categorie) {
@@ -81,18 +81,18 @@ function CataloguePage() {
       list.push({
         key: "categorie",
         label: cat?.name ?? search.categorie,
-        onRemove: () => navigate({ search: (s) => ({ ...s, categorie: undefined }) }),
+        onRemove: () => navigate({ search: (s: any) => ({ ...s, categorie: undefined }) }),
       });
     }
     if (search.q) {
-      list.push({ key: "q", label: `« ${search.q} »`, onRemove: () => { setLocalQ(""); navigate({ search: (s) => ({ ...s, q: undefined }) }); } });
+      list.push({ key: "q", label: `« ${search.q} »`, onRemove: () => { setLocalQ(""); navigate({ search: (s: any) => ({ ...s, q: undefined }) }); } });
     }
     return list;
   }, [search, categories, navigate]);
 
   const handleSubmitSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    navigate({ search: (s) => ({ ...s, q: localQ.trim() || undefined }) });
+    navigate({ search: (s: any) => ({ ...s, q: localQ.trim() || undefined }) });
   };
 
   const resetAll = () => {
@@ -137,7 +137,7 @@ function CataloguePage() {
 
         <select
           value={search.tri ?? "nouveaute"}
-          onChange={(e) => navigate({ search: (s) => ({ ...s, tri: e.target.value === "nouveaute" ? undefined : (e.target.value as "prix_asc" | "prix_desc") }) })}
+          onChange={(e) => navigate({ search: (s: any) => ({ ...s, tri: e.target.value === "nouveaute" ? undefined : (e.target.value as "prix_asc" | "prix_desc") }) })}
           className="h-12 px-5 rounded-full border border-border bg-card text-sm font-medium cursor-pointer hover:bg-surface"
         >
           <option value="nouveaute">Nouveautés</option>
@@ -244,7 +244,7 @@ function FiltersPanel({
             return (
               <button
                 key={o.code}
-                onClick={() => navigate({ search: (s) => ({ ...s, origine: active ? undefined : (o.code as "CN" | "AE") }) })}
+                onClick={() => navigate({ search: (s: any) => ({ ...s, origine: active ? undefined : (o.code as "CN" | "AE") }) })}
                 className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl border text-sm font-medium transition-colors ${
                   active ? "bg-primary text-primary-foreground border-primary" : "bg-card border-border hover:bg-surface"
                 }`}
@@ -266,7 +266,7 @@ function FiltersPanel({
             return (
               <button
                 key={c.id}
-                onClick={() => navigate({ search: (s) => ({ ...s, categorie: active ? undefined : c.slug }) })}
+                onClick={() => navigate({ search: (s: any) => ({ ...s, categorie: active ? undefined : c.slug }) })}
                 className={`px-3.5 py-2 rounded-full border text-xs font-medium transition-colors ${
                   active ? "bg-primary text-primary-foreground border-primary" : "bg-card border-border hover:bg-surface"
                 }`}
