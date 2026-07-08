@@ -3,9 +3,9 @@
 export type Currency = "XOF" | "EUR" | "USD";
 
 export const CURRENCY_META: Record<Currency, { symbol: string; code: string; label: string; flag: string }> = {
-  XOF: { symbol: "FCFA", code: "XOF", label: "Franc CFA", flag: "🇸🇳" },
-  EUR: { symbol: "€", code: "EUR", label: "Euro", flag: "🇪🇺" },
-  USD: { symbol: "$", code: "USD", label: "Dollar US", flag: "🇺🇸" },
+  XOF: { symbol: "FCFA", code: "XOF", label: "Franc CFA", flag: "SN" },
+  EUR: { symbol: "€", code: "EUR", label: "Euro", flag: "EU" },
+  USD: { symbol: "$", code: "USD", label: "Dollar US", flag: "US" },
 };
 
 // Fallback rates if DB unavailable
