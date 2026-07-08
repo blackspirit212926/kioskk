@@ -29,9 +29,8 @@ function HomePage() {
 /* ============ HERO ============ */
 function Hero() {
   return (
-    <section className="relative overflow-hidden">
-      <div className="absolute inset-0 -z-10" style={{ background: "var(--gradient-hero)" }} />
-      <div className="absolute inset-0 -z-10 opacity-[0.04] pointer-events-none"
+    <section className="relative overflow-hidden" style={{ background: "var(--gradient-hero)" }}>
+      <div className="absolute inset-0 opacity-[0.04] pointer-events-none"
            style={{ backgroundImage: "radial-gradient(oklch(1 0 0) 1px, transparent 1px)", backgroundSize: "24px 24px" }} />
 
       <div className="container-kiosk py-16 md:py-28 lg:py-32 grid md:grid-cols-2 gap-10 md:gap-16 items-center">
