@@ -9,10 +9,46 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as RealisationsRouteImport } from './routes/realisations'
+import { Route as PanierRouteImport } from './routes/panier'
+import { Route as DemanderUnProduitRouteImport } from './routes/demander-un-produit'
+import { Route as ConnexionRouteImport } from './routes/connexion'
+import { Route as CommentCaMarcheRouteImport } from './routes/comment-ca-marche'
 import { Route as CatalogueRouteImport } from './routes/catalogue'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ProduitSlugRouteImport } from './routes/produit.$slug'
 
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RealisationsRoute = RealisationsRouteImport.update({
+  id: '/realisations',
+  path: '/realisations',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PanierRoute = PanierRouteImport.update({
+  id: '/panier',
+  path: '/panier',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DemanderUnProduitRoute = DemanderUnProduitRouteImport.update({
+  id: '/demander-un-produit',
+  path: '/demander-un-produit',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ConnexionRoute = ConnexionRouteImport.update({
+  id: '/connexion',
+  path: '/connexion',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CommentCaMarcheRoute = CommentCaMarcheRouteImport.update({
+  id: '/comment-ca-marche',
+  path: '/comment-ca-marche',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CatalogueRoute = CatalogueRouteImport.update({
   id: '/catalogue',
   path: '/catalogue',
@@ -32,35 +68,129 @@ const ProduitSlugRoute = ProduitSlugRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/catalogue': typeof CatalogueRoute
+  '/comment-ca-marche': typeof CommentCaMarcheRoute
+  '/connexion': typeof ConnexionRoute
+  '/demander-un-produit': typeof DemanderUnProduitRoute
+  '/panier': typeof PanierRoute
+  '/realisations': typeof RealisationsRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/produit/$slug': typeof ProduitSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/catalogue': typeof CatalogueRoute
+  '/comment-ca-marche': typeof CommentCaMarcheRoute
+  '/connexion': typeof ConnexionRoute
+  '/demander-un-produit': typeof DemanderUnProduitRoute
+  '/panier': typeof PanierRoute
+  '/realisations': typeof RealisationsRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/produit/$slug': typeof ProduitSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/catalogue': typeof CatalogueRoute
+  '/comment-ca-marche': typeof CommentCaMarcheRoute
+  '/connexion': typeof ConnexionRoute
+  '/demander-un-produit': typeof DemanderUnProduitRoute
+  '/panier': typeof PanierRoute
+  '/realisations': typeof RealisationsRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/produit/$slug': typeof ProduitSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/catalogue' | '/produit/$slug'
+  fullPaths:
+    | '/'
+    | '/catalogue'
+    | '/comment-ca-marche'
+    | '/connexion'
+    | '/demander-un-produit'
+    | '/panier'
+    | '/realisations'
+    | '/sitemap.xml'
+    | '/produit/$slug'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/catalogue' | '/produit/$slug'
-  id: '__root__' | '/' | '/catalogue' | '/produit/$slug'
+  to:
+    | '/'
+    | '/catalogue'
+    | '/comment-ca-marche'
+    | '/connexion'
+    | '/demander-un-produit'
+    | '/panier'
+    | '/realisations'
+    | '/sitemap.xml'
+    | '/produit/$slug'
+  id:
+    | '__root__'
+    | '/'
+    | '/catalogue'
+    | '/comment-ca-marche'
+    | '/connexion'
+    | '/demander-un-produit'
+    | '/panier'
+    | '/realisations'
+    | '/sitemap.xml'
+    | '/produit/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CatalogueRoute: typeof CatalogueRoute
+  CommentCaMarcheRoute: typeof CommentCaMarcheRoute
+  ConnexionRoute: typeof ConnexionRoute
+  DemanderUnProduitRoute: typeof DemanderUnProduitRoute
+  PanierRoute: typeof PanierRoute
+  RealisationsRoute: typeof RealisationsRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   ProduitSlugRoute: typeof ProduitSlugRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/realisations': {
+      id: '/realisations'
+      path: '/realisations'
+      fullPath: '/realisations'
+      preLoaderRoute: typeof RealisationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/panier': {
+      id: '/panier'
+      path: '/panier'
+      fullPath: '/panier'
+      preLoaderRoute: typeof PanierRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/demander-un-produit': {
+      id: '/demander-un-produit'
+      path: '/demander-un-produit'
+      fullPath: '/demander-un-produit'
+      preLoaderRoute: typeof DemanderUnProduitRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/connexion': {
+      id: '/connexion'
+      path: '/connexion'
+      fullPath: '/connexion'
+      preLoaderRoute: typeof ConnexionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/comment-ca-marche': {
+      id: '/comment-ca-marche'
+      path: '/comment-ca-marche'
+      fullPath: '/comment-ca-marche'
+      preLoaderRoute: typeof CommentCaMarcheRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/catalogue': {
       id: '/catalogue'
       path: '/catalogue'
@@ -88,6 +218,12 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CatalogueRoute: CatalogueRoute,
+  CommentCaMarcheRoute: CommentCaMarcheRoute,
+  ConnexionRoute: ConnexionRoute,
+  DemanderUnProduitRoute: DemanderUnProduitRoute,
+  PanierRoute: PanierRoute,
+  RealisationsRoute: RealisationsRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
   ProduitSlugRoute: ProduitSlugRoute,
 }
 export const routeTree = rootRouteImport
