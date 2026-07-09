@@ -22,7 +22,7 @@ export interface ProductCardData {
   image_url?: string | null;
 }
 
-export function ProductCard({ product }: { product: ProductCardData }) {
+export function ProductCard({ product, badge }: { product: ProductCardData; badge?: string }) {
   const { currency, rates } = useCurrency();
   const { isFavorite, toggle } = useFavorites();
   const { addItem } = useCart();
@@ -37,6 +37,11 @@ export function ProductCard({ product }: { product: ProductCardData }) {
 
   return (
     <div className="group relative glass-panel rounded-3xl overflow-hidden hover:border-accent/30 transition-all duration-300 hover:shadow-elevated hover:-translate-y-1">
+      {badge && (
+        <div className="hidden md:flex absolute -top-3 -right-3 z-10 w-16 h-16 rounded-full bg-accent text-accent-foreground items-center justify-center text-center text-[10px] font-bold leading-tight px-1.5">
+          {badge}
+        </div>
+      )}
       <Link to="/produit/$slug" params={{ slug: product.slug }} className="block">
         <div className="relative aspect-square overflow-hidden bg-surface">
           <img

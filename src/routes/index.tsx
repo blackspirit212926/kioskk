@@ -35,14 +35,19 @@ function Hero() {
 
       <div className="container-kiosk py-16 md:py-28 lg:py-32 grid md:grid-cols-2 gap-10 md:gap-16 items-center">
         <div className="text-sidebar-foreground kiosk-fade-up">
-          <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent/20 backdrop-blur border border-accent/30 text-accent text-[11px] font-semibold uppercase tracking-wider">
-            <Sparkles className="w-3 h-3" />
+          <span
+            className="inline-flex items-center pl-6 pr-4 py-1.5 text-accent text-[11px] font-semibold uppercase tracking-wider"
+            style={{
+              clipPath: "polygon(0 50%, 12% 0, 100% 0, 100% 100%, 12% 100%)",
+              background: "oklch(0.82 0.14 75 / 0.15)",
+            }}
+          >
             Précommandes ouvertes
           </span>
           <h1 className="mt-6 text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-display font-bold leading-[1.05] text-balance-fix">
             Importé pour vous.{" "}
             <span className="relative inline-block">
-              <span className="relative z-10">Livré chez vous.</span>
+              <span className="relative z-10 italic font-medium text-accent">Livré chez vous.</span>
               <svg className="absolute -bottom-2 left-0 w-full" viewBox="0 0 200 12" fill="none" preserveAspectRatio="none">
                 <path d="M2 8 Q 50 2, 100 6 T 198 4" stroke="oklch(0.82 0.14 75)" strokeWidth="3" strokeLinecap="round" />
               </svg>
@@ -87,15 +92,14 @@ function Hero() {
             </div>
           </div>
 
-          <div className="hidden md:flex absolute -right-6 bottom-8 bg-background/95 backdrop-blur rounded-2xl p-4 shadow-xl border border-border max-w-[240px] kiosk-fade-up" style={{ animationDelay: "0.55s" }}>
-            <div className="flex gap-3">
-              <div className="w-10 h-10 rounded-full bg-accent/20 text-accent-foreground flex items-center justify-center flex-shrink-0">
-                <Plane className="w-5 h-5" />
-              </div>
-              <div>
-                <div className="text-xs font-semibold">Fret aérien disponible</div>
-                <div className="text-[11px] text-muted-foreground mt-0.5">10 à 20 jours à votre porte</div>
-              </div>
+          <div className="hidden md:block absolute -right-6 bottom-10 kiosk-fade-up" style={{ animationDelay: "0.55s" }}>
+            <svg className="absolute right-full top-1/2 -translate-y-1/2 w-10 h-16 pointer-events-none" viewBox="0 0 40 64" fill="none" preserveAspectRatio="none">
+              <path d="M38 2 Q 38 32, 2 62" stroke="oklch(0.82 0.14 75)" strokeWidth="2" strokeDasharray="4 4" strokeLinecap="round" />
+            </svg>
+            <div className="bg-background rounded-2xl p-4 shadow-xl border border-border max-w-[200px]">
+              <div className="text-[11px] text-muted-foreground">À partir de</div>
+              <div className="font-display font-bold text-xl text-primary">12 500 FCFA</div>
+              <div className="text-[11px] text-muted-foreground mt-1">Écouteurs Bluetooth Pro</div>
             </div>
           </div>
         </div>
@@ -279,8 +283,8 @@ function FeaturedProducts() {
           </div>
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-            {(data ?? []).map((p) => (
-              <ProductCard key={p.id} product={p} />
+            {(data ?? []).map((p, i) => (
+              <ProductCard key={p.id} product={p} badge={i === 0 ? "Top vente" : undefined} />
             ))}
           </div>
         )}
