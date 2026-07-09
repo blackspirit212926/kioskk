@@ -9,13 +9,13 @@ export const Route = createFileRoute("/compte")({
   head: () => ({ meta: [{ title: "Mon compte — Kiosk" }, { name: "robots", content: "noindex" }] }),
 });
 
-const NAV = [
+const NAV: { to: string; label: string; icon: typeof LayoutDashboard; exact?: boolean }[] = [
   { to: "/compte", label: "Tableau de bord", icon: LayoutDashboard, exact: true },
   { to: "/compte/commandes", label: "Mes commandes", icon: Package },
   { to: "/compte/favoris", label: "Favoris", icon: Heart },
   { to: "/compte/adresses", label: "Adresses", icon: MapPin },
   { to: "/compte/profil", label: "Profil", icon: User },
-] as const;
+];
 
 function AccountLayout() {
   const { user, loading, signOut } = useAuth();

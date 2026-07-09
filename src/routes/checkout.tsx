@@ -72,6 +72,7 @@ function CheckoutPage() {
         .from("orders")
         .insert({
           user_id: user.id,
+          order_number: "",
           subtotal_xof: subtotalXof,
           total_paid_xof: subtotalXof,
           payment_method: method,

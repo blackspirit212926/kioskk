@@ -19,10 +19,13 @@ function FavoritesPage() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("products")
-        .select("id, slug, name, short_description, price_xof, compare_at_price_xof, origin_country, estimated_delivery_days_min, estimated_delivery_days_max, rating_avg, rating_count, image_url")
+        .select("id, slug, name, short_description, price_xof, compare_at_price_xof, origin_country, estimated_delivery_days_min, estimated_delivery_days_max, rating_avg, rating_count, product_images(url, sort_order)")
         .in("id", idArray);
       if (error) throw error;
-      return data as ProductCardData[];
+      return (data ?? []).map((p) => {
+        const { product_images, ...rest } = p as typeof p & { product_images?: { url: string; sort_order: number }[] };
+        return { ...rest, image_url: product_images?.[0]?.url ?? null } as ProductCardData;
+      });
     },
   });
 
