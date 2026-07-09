@@ -92,7 +92,7 @@ function CartPage() {
               Vous payez uniquement le prix des produits à la commande. Les frais de transit et de livraison vous seront communiqués à l'arrivée du colis à Dakar.
             </div>
             <Button asChild size="lg" className="w-full rounded-full h-13 btn-glow">
-              <Link to="/connexion">
+              <Link to="/checkout">
                 Passer commande <ArrowRight className="w-4 h-4 ml-1" />
               </Link>
             </Button>

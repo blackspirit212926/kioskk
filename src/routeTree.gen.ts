@@ -14,10 +14,18 @@ import { Route as RealisationsRouteImport } from './routes/realisations'
 import { Route as PanierRouteImport } from './routes/panier'
 import { Route as DemanderUnProduitRouteImport } from './routes/demander-un-produit'
 import { Route as ConnexionRouteImport } from './routes/connexion'
+import { Route as CompteRouteImport } from './routes/compte'
 import { Route as CommentCaMarcheRouteImport } from './routes/comment-ca-marche'
+import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as CatalogueRouteImport } from './routes/catalogue'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as CompteIndexRouteImport } from './routes/compte.index'
 import { Route as ProduitSlugRouteImport } from './routes/produit.$slug'
+import { Route as CompteProfilRouteImport } from './routes/compte.profil'
+import { Route as CompteFavorisRouteImport } from './routes/compte.favoris'
+import { Route as CompteCommandesRouteImport } from './routes/compte.commandes'
+import { Route as CompteAdressesRouteImport } from './routes/compte.adresses'
+import { Route as CompteCommandesIdRouteImport } from './routes/compte.commandes.$id'
 
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
@@ -44,9 +52,19 @@ const ConnexionRoute = ConnexionRouteImport.update({
   path: '/connexion',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CompteRoute = CompteRouteImport.update({
+  id: '/compte',
+  path: '/compte',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CommentCaMarcheRoute = CommentCaMarcheRouteImport.update({
   id: '/comment-ca-marche',
   path: '/comment-ca-marche',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CheckoutRoute = CheckoutRouteImport.update({
+  id: '/checkout',
+  path: '/checkout',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CatalogueRoute = CatalogueRouteImport.update({
@@ -59,86 +77,164 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CompteIndexRoute = CompteIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => CompteRoute,
+} as any)
 const ProduitSlugRoute = ProduitSlugRouteImport.update({
   id: '/produit/$slug',
   path: '/produit/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CompteProfilRoute = CompteProfilRouteImport.update({
+  id: '/profil',
+  path: '/profil',
+  getParentRoute: () => CompteRoute,
+} as any)
+const CompteFavorisRoute = CompteFavorisRouteImport.update({
+  id: '/favoris',
+  path: '/favoris',
+  getParentRoute: () => CompteRoute,
+} as any)
+const CompteCommandesRoute = CompteCommandesRouteImport.update({
+  id: '/commandes',
+  path: '/commandes',
+  getParentRoute: () => CompteRoute,
+} as any)
+const CompteAdressesRoute = CompteAdressesRouteImport.update({
+  id: '/adresses',
+  path: '/adresses',
+  getParentRoute: () => CompteRoute,
+} as any)
+const CompteCommandesIdRoute = CompteCommandesIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => CompteCommandesRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/catalogue': typeof CatalogueRoute
+  '/checkout': typeof CheckoutRoute
   '/comment-ca-marche': typeof CommentCaMarcheRoute
+  '/compte': typeof CompteRouteWithChildren
   '/connexion': typeof ConnexionRoute
   '/demander-un-produit': typeof DemanderUnProduitRoute
   '/panier': typeof PanierRoute
   '/realisations': typeof RealisationsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/compte/adresses': typeof CompteAdressesRoute
+  '/compte/commandes': typeof CompteCommandesRouteWithChildren
+  '/compte/favoris': typeof CompteFavorisRoute
+  '/compte/profil': typeof CompteProfilRoute
   '/produit/$slug': typeof ProduitSlugRoute
+  '/compte/': typeof CompteIndexRoute
+  '/compte/commandes/$id': typeof CompteCommandesIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/catalogue': typeof CatalogueRoute
+  '/checkout': typeof CheckoutRoute
   '/comment-ca-marche': typeof CommentCaMarcheRoute
   '/connexion': typeof ConnexionRoute
   '/demander-un-produit': typeof DemanderUnProduitRoute
   '/panier': typeof PanierRoute
   '/realisations': typeof RealisationsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/compte/adresses': typeof CompteAdressesRoute
+  '/compte/commandes': typeof CompteCommandesRouteWithChildren
+  '/compte/favoris': typeof CompteFavorisRoute
+  '/compte/profil': typeof CompteProfilRoute
   '/produit/$slug': typeof ProduitSlugRoute
+  '/compte': typeof CompteIndexRoute
+  '/compte/commandes/$id': typeof CompteCommandesIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/catalogue': typeof CatalogueRoute
+  '/checkout': typeof CheckoutRoute
   '/comment-ca-marche': typeof CommentCaMarcheRoute
+  '/compte': typeof CompteRouteWithChildren
   '/connexion': typeof ConnexionRoute
   '/demander-un-produit': typeof DemanderUnProduitRoute
   '/panier': typeof PanierRoute
   '/realisations': typeof RealisationsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/compte/adresses': typeof CompteAdressesRoute
+  '/compte/commandes': typeof CompteCommandesRouteWithChildren
+  '/compte/favoris': typeof CompteFavorisRoute
+  '/compte/profil': typeof CompteProfilRoute
   '/produit/$slug': typeof ProduitSlugRoute
+  '/compte/': typeof CompteIndexRoute
+  '/compte/commandes/$id': typeof CompteCommandesIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/catalogue'
+    | '/checkout'
     | '/comment-ca-marche'
+    | '/compte'
     | '/connexion'
     | '/demander-un-produit'
     | '/panier'
     | '/realisations'
     | '/sitemap.xml'
+    | '/compte/adresses'
+    | '/compte/commandes'
+    | '/compte/favoris'
+    | '/compte/profil'
     | '/produit/$slug'
+    | '/compte/'
+    | '/compte/commandes/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/catalogue'
+    | '/checkout'
     | '/comment-ca-marche'
     | '/connexion'
     | '/demander-un-produit'
     | '/panier'
     | '/realisations'
     | '/sitemap.xml'
+    | '/compte/adresses'
+    | '/compte/commandes'
+    | '/compte/favoris'
+    | '/compte/profil'
     | '/produit/$slug'
+    | '/compte'
+    | '/compte/commandes/$id'
   id:
     | '__root__'
     | '/'
     | '/catalogue'
+    | '/checkout'
     | '/comment-ca-marche'
+    | '/compte'
     | '/connexion'
     | '/demander-un-produit'
     | '/panier'
     | '/realisations'
     | '/sitemap.xml'
+    | '/compte/adresses'
+    | '/compte/commandes'
+    | '/compte/favoris'
+    | '/compte/profil'
     | '/produit/$slug'
+    | '/compte/'
+    | '/compte/commandes/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CatalogueRoute: typeof CatalogueRoute
+  CheckoutRoute: typeof CheckoutRoute
   CommentCaMarcheRoute: typeof CommentCaMarcheRoute
+  CompteRoute: typeof CompteRouteWithChildren
   ConnexionRoute: typeof ConnexionRoute
   DemanderUnProduitRoute: typeof DemanderUnProduitRoute
   PanierRoute: typeof PanierRoute
@@ -184,11 +280,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ConnexionRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/compte': {
+      id: '/compte'
+      path: '/compte'
+      fullPath: '/compte'
+      preLoaderRoute: typeof CompteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/comment-ca-marche': {
       id: '/comment-ca-marche'
       path: '/comment-ca-marche'
       fullPath: '/comment-ca-marche'
       preLoaderRoute: typeof CommentCaMarcheRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/checkout': {
+      id: '/checkout'
+      path: '/checkout'
+      fullPath: '/checkout'
+      preLoaderRoute: typeof CheckoutRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/catalogue': {
@@ -205,6 +315,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/compte/': {
+      id: '/compte/'
+      path: '/'
+      fullPath: '/compte/'
+      preLoaderRoute: typeof CompteIndexRouteImport
+      parentRoute: typeof CompteRoute
+    }
     '/produit/$slug': {
       id: '/produit/$slug'
       path: '/produit/$slug'
@@ -212,13 +329,81 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProduitSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/compte/profil': {
+      id: '/compte/profil'
+      path: '/profil'
+      fullPath: '/compte/profil'
+      preLoaderRoute: typeof CompteProfilRouteImport
+      parentRoute: typeof CompteRoute
+    }
+    '/compte/favoris': {
+      id: '/compte/favoris'
+      path: '/favoris'
+      fullPath: '/compte/favoris'
+      preLoaderRoute: typeof CompteFavorisRouteImport
+      parentRoute: typeof CompteRoute
+    }
+    '/compte/commandes': {
+      id: '/compte/commandes'
+      path: '/commandes'
+      fullPath: '/compte/commandes'
+      preLoaderRoute: typeof CompteCommandesRouteImport
+      parentRoute: typeof CompteRoute
+    }
+    '/compte/adresses': {
+      id: '/compte/adresses'
+      path: '/adresses'
+      fullPath: '/compte/adresses'
+      preLoaderRoute: typeof CompteAdressesRouteImport
+      parentRoute: typeof CompteRoute
+    }
+    '/compte/commandes/$id': {
+      id: '/compte/commandes/$id'
+      path: '/$id'
+      fullPath: '/compte/commandes/$id'
+      preLoaderRoute: typeof CompteCommandesIdRouteImport
+      parentRoute: typeof CompteCommandesRoute
+    }
   }
 }
+
+interface CompteCommandesRouteChildren {
+  CompteCommandesIdRoute: typeof CompteCommandesIdRoute
+}
+
+const CompteCommandesRouteChildren: CompteCommandesRouteChildren = {
+  CompteCommandesIdRoute: CompteCommandesIdRoute,
+}
+
+const CompteCommandesRouteWithChildren = CompteCommandesRoute._addFileChildren(
+  CompteCommandesRouteChildren,
+)
+
+interface CompteRouteChildren {
+  CompteAdressesRoute: typeof CompteAdressesRoute
+  CompteCommandesRoute: typeof CompteCommandesRouteWithChildren
+  CompteFavorisRoute: typeof CompteFavorisRoute
+  CompteProfilRoute: typeof CompteProfilRoute
+  CompteIndexRoute: typeof CompteIndexRoute
+}
+
+const CompteRouteChildren: CompteRouteChildren = {
+  CompteAdressesRoute: CompteAdressesRoute,
+  CompteCommandesRoute: CompteCommandesRouteWithChildren,
+  CompteFavorisRoute: CompteFavorisRoute,
+  CompteProfilRoute: CompteProfilRoute,
+  CompteIndexRoute: CompteIndexRoute,
+}
+
+const CompteRouteWithChildren =
+  CompteRoute._addFileChildren(CompteRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CatalogueRoute: CatalogueRoute,
+  CheckoutRoute: CheckoutRoute,
   CommentCaMarcheRoute: CommentCaMarcheRoute,
+  CompteRoute: CompteRouteWithChildren,
   ConnexionRoute: ConnexionRoute,
   DemanderUnProduitRoute: DemanderUnProduitRoute,
   PanierRoute: PanierRoute,
