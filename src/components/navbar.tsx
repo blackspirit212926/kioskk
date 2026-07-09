@@ -74,6 +74,8 @@ export function Navbar() {
         </nav>
 
         <div className="flex-1" />
+<ThemeToggle />
+
 
         {/* Currency selector */}
         <DropdownMenu>
