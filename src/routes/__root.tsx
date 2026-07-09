@@ -1,3 +1,5 @@
+import { ThemeProvider } from "@/hooks/use-theme";
+
 import "@fontsource-variable/space-grotesk";
 import "@fontsource-variable/plus-jakarta-sans";
 
