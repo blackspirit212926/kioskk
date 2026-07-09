@@ -1,5 +1,3 @@
-import { ThemeProvider } from "@/hooks/use-theme";
-
 import "@fontsource-variable/space-grotesk";
 import "@fontsource-variable/plus-jakarta-sans";
 
@@ -24,6 +22,7 @@ import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { CartDrawer } from "@/components/cart-drawer";
 import { AuthProvider } from "@/hooks/use-auth";
+import { ThemeProvider } from "@/hooks/use-theme";
 
 function NotFoundComponent() {
   return (
@@ -138,11 +137,11 @@ function RootShell({ children }: { children: ReactNode }) {
   );
 }
 
-
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
 
-  return (<ThemeProvider>
+  return (
+    <ThemeProvider>
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
           <CurrencyProvider>
@@ -163,25 +162,5 @@ function RootComponent() {
         </AuthProvider>
       </QueryClientProvider>
     </ThemeProvider>
-
-    <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <CurrencyProvider>
-          <FavoritesProvider>
-            <CartProvider>
-              <div className="min-h-screen flex flex-col bg-background">
-                <Navbar />
-                <main className="flex-1">
-                  <Outlet />
-                </main>
-                <Footer />
-                <CartDrawer />
-              </div>
-              <Toaster position="bottom-right" richColors closeButton />
-            </CartProvider>
-          </FavoritesProvider>
-        </CurrencyProvider>
-      </AuthProvider>
-    </QueryClientProvider>
   );
 }
