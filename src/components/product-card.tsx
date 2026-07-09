@@ -36,7 +36,7 @@ export function ProductCard({ product }: { product: ProductCardData }) {
     : 0;
 
   return (
-    <div className="group relative bg-card rounded-3xl overflow-hidden border border-border/60 hover:border-transparent transition-all duration-300 hover:shadow-[0_20px_60px_-20px_oklch(0.15_0.05_265/0.25)] hover:-translate-y-1">
+    <div className="group relative glass-panel rounded-3xl overflow-hidden hover:border-accent/30 transition-all duration-300 hover:shadow-elevated hover:-translate-y-1">
       <Link to="/produit/$slug" params={{ slug: product.slug }} className="block">
         <div className="relative aspect-square overflow-hidden bg-surface">
           <img
