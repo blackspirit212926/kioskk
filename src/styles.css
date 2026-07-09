@@ -7,12 +7,12 @@
 /*
  * KIOSK Design System
  * Palette: Navy #11114B, Amber #FFBC56, Cream #FFFBF4
- * Typography: Space Grotesk (display) + Plus Jakarta Sans (body)
+ * Typography: Cabinet Grotesk (display, via Fontshare CDN) + Plus Jakarta Sans (body)
  * All values in oklch semantic tokens. Never hard-code colors in components.
  */
 
 @theme inline {
-  --font-display: "Space Grotesk Variable", "Space Grotesk", system-ui, sans-serif;
+  --font-display: "Cabinet Grotesk", "Space Grotesk Variable", system-ui, sans-serif;
   --font-sans: "Plus Jakarta Sans Variable", "Plus Jakarta Sans", system-ui, sans-serif;
 
   --radius-sm: calc(var(--radius) - 4px);

@@ -15,6 +15,8 @@ export function BottomNav() {
 
   const isActive = (to: string) => location.pathname === to || (to !== "/" && location.pathname.startsWith(to));
 
+  if (location.pathname.startsWith("/produit/")) return null;
+
   return (
     <nav className="md:hidden fixed bottom-4 left-1/2 -translate-x-1/2 z-40 flex items-center gap-1 rounded-full bg-sidebar px-1.5 py-1.5 shadow-xl border border-sidebar-foreground/10">
       {links.map((link) => {

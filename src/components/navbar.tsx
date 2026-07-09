@@ -1,4 +1,4 @@
-import { Link, useLocation } from "@tanstack/react-router";
+import { Link, useLocation, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { Heart, Menu, Search, ShoppingBag, User, X, LogOut, Package } from "lucide-react";
 import { KioskLogo } from "./kiosk-logo";
@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 const NAV_LINKS = [
+  { to: "/", label: "Accueil" },
   { to: "/catalogue", label: "Catalogue" },
   { to: "/comment-ca-marche", label: "Comment ça marche" },
   { to: "/realisations", label: "Réalisations" },
@@ -32,9 +33,16 @@ export function Navbar() {
   const { currency, setCurrency } = useCurrency();
   const { user, signOut } = useAuth();
   const location = useLocation();
+  const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [mobileQuery, setMobileQuery] = useState("");
 
   const isActive = (to: string) => location.pathname === to || (to !== "/" && location.pathname.startsWith(to));
+
+  const submitMobileSearch = () => {
+    navigate({ to: "/catalogue", search: { q: mobileQuery.trim() || undefined } });
+    setMobileOpen(false);
+  };
 
   return (
     <div className="sticky top-4 z-50 px-4">
@@ -140,6 +148,17 @@ export function Navbar() {
 
       {mobileOpen && (
         <div className="md:hidden max-w-4xl mx-auto mt-2 rounded-3xl bg-sidebar shadow-2xl p-3 kiosk-fade-up">
+          <div className="relative mb-2">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-sidebar-foreground/60 pointer-events-none" />
+            <input
+              type="text"
+              value={mobileQuery}
+              onChange={(e) => setMobileQuery(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && submitMobileSearch()}
+              placeholder="Rechercher un produit..."
+              className="w-full h-12 pl-11 pr-4 rounded-full bg-sidebar-foreground/10 text-sidebar-foreground placeholder:text-sidebar-foreground/50 outline-none"
+            />
+          </div>
           <nav className="flex flex-col gap-1">
             {NAV_LINKS.map((link) => (
               <Link
