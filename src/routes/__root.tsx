@@ -21,6 +21,7 @@ import { FavoritesProvider } from "@/contexts/favorites-context";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { CartDrawer } from "@/components/cart-drawer";
+import { BottomNav } from "@/components/bottom-nav";
 import { AuthProvider } from "@/hooks/use-auth";
 import { ThemeProvider } from "@/hooks/use-theme";
 
@@ -147,13 +148,14 @@ function RootComponent() {
           <CurrencyProvider>
             <FavoritesProvider>
               <CartProvider>
-                <div className="min-h-screen flex flex-col bg-background">
+                <div className="min-h-screen flex flex-col bg-background pb-24 md:pb-0">
                   <Navbar />
                   <main className="flex-1">
                     <Outlet />
                   </main>
                   <Footer />
                   <CartDrawer />
+                  <BottomNav />
                 </div>
                 <Toaster position="bottom-right" richColors closeButton />
               </CartProvider>
