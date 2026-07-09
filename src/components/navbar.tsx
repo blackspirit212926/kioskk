@@ -1,15 +1,18 @@
 import { Link, useLocation } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Bell, Heart, Menu, Search, ShoppingBag, User, X } from "lucide-react";
+import { Heart, Menu, Search, ShoppingBag, User, X, LogOut, Package } from "lucide-react";
 import { KioskLogo } from "./kiosk-logo";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/contexts/cart-context";
 import { useCurrency } from "@/contexts/currency-context";
+import { useAuth } from "@/hooks/use-auth";
 import { CURRENCY_META, type Currency } from "@/lib/format";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -24,6 +27,7 @@ const NAV_LINKS = [
 export function Navbar() {
   const { count, openDrawer } = useCart();
   const { currency, setCurrency } = useCurrency();
+  const { user, signOut } = useAuth();
   const location = useLocation();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -99,21 +103,35 @@ export function Navbar() {
           <Search className="w-4.5 h-4.5" />
         </Link>
 
-        <Link
-          to="/connexion"
-          className="hidden md:inline-flex items-center justify-center w-10 h-10 rounded-full text-foreground hover:bg-surface transition-colors"
-          aria-label="Notifications"
-        >
-          <Bell className="w-4.5 h-4.5" />
-        </Link>
-
-        <Link
-          to="/connexion"
-          className="hidden md:inline-flex items-center justify-center w-10 h-10 rounded-full text-foreground hover:bg-surface transition-colors"
-          aria-label="Mon compte"
-        >
-          <User className="w-4.5 h-4.5" />
-        </Link>
+        {user ? (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button
+                className="hidden md:inline-flex items-center justify-center w-10 h-10 rounded-full bg-primary text-primary-foreground text-sm font-bold hover:opacity-90 transition"
+                aria-label="Mon compte"
+              >
+                {(user.user_metadata?.full_name || user.email || "?").charAt(0).toUpperCase()}
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="min-w-[220px]">
+              <DropdownMenuLabel className="truncate">{user.user_metadata?.full_name || user.email}</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem asChild><Link to="/compte"><User className="w-4 h-4 mr-2" /> Mon compte</Link></DropdownMenuItem>
+              <DropdownMenuItem asChild><Link to="/compte/commandes"><Package className="w-4 h-4 mr-2" /> Mes commandes</Link></DropdownMenuItem>
+              <DropdownMenuItem asChild><Link to="/compte/favoris"><Heart className="w-4 h-4 mr-2" /> Favoris</Link></DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={() => signOut()} className="text-destructive"><LogOut className="w-4 h-4 mr-2" /> Se déconnecter</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        ) : (
+          <Link
+            to="/connexion"
+            className="hidden md:inline-flex items-center justify-center w-10 h-10 rounded-full text-foreground hover:bg-surface transition-colors"
+            aria-label="Mon compte"
+          >
+            <User className="w-4.5 h-4.5" />
+          </Link>
+        )}
 
         <button
           onClick={openDrawer}
@@ -164,14 +182,14 @@ export function Navbar() {
                   </Link>
                 ))}
                 <Link
-                  to="/connexion"
+                  to={user ? "/compte" : "/connexion"}
                   onClick={() => setMobileOpen(false)}
                   className="px-4 py-3.5 rounded-2xl text-lg font-medium hover:bg-surface flex items-center gap-3"
                 >
-                  <User className="w-5 h-5" /> Mon compte
+                  <User className="w-5 h-5" /> {user ? "Mon compte" : "Connexion"}
                 </Link>
                 <Link
-                  to="/connexion"
+                  to={user ? "/compte/favoris" : "/connexion"}
                   onClick={() => setMobileOpen(false)}
                   className="px-4 py-3.5 rounded-2xl text-lg font-medium hover:bg-surface flex items-center gap-3"
                 >
