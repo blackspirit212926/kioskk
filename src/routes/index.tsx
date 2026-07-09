@@ -34,7 +34,7 @@ function Hero() {
            style={{ backgroundImage: "radial-gradient(oklch(1 0 0) 1px, transparent 1px)", backgroundSize: "24px 24px" }} />
 
       <div className="container-kiosk py-16 md:py-28 lg:py-32 grid md:grid-cols-2 gap-10 md:gap-16 items-center">
-        <div className="text-primary-foreground kiosk-fade-up">
+        <div className="text-sidebar-foreground kiosk-fade-up">
           <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent/20 backdrop-blur border border-accent/30 text-accent text-[11px] font-semibold uppercase tracking-wider">
             <Sparkles className="w-3 h-3" />
             Précommandes ouvertes
@@ -48,7 +48,7 @@ function Hero() {
               </svg>
             </span>
           </h1>
-          <p className="mt-6 text-base md:text-lg text-primary-foreground/75 max-w-lg leading-relaxed">
+          <p className="mt-6 text-base md:text-lg text-sidebar-foreground/75 max-w-lg leading-relaxed">
             Précommandez vos produits préférés directement depuis Guangzhou et Dubaï. Nous les sourçons, les importons et les livrons à votre porte à Dakar.
           </p>
           <div className="mt-8 flex flex-col sm:flex-row gap-3">
@@ -57,7 +57,7 @@ function Hero() {
                 Explorer le catalogue <ArrowRight className="w-4 h-4 ml-1" />
               </Link>
             </Button>
-            <Button asChild size="lg" variant="outline" className="rounded-full h-13 px-7 text-base bg-transparent border-primary-foreground/25 text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground">
+            <Button asChild size="lg" variant="outline" className="rounded-full h-13 px-7 text-base bg-transparent border-sidebar-foreground/25 text-sidebar-foreground hover:bg-sidebar-foreground/10 hover:text-sidebar-foreground">
               <Link to="/demander-un-produit">Demander un produit</Link>
             </Button>
           </div>
@@ -65,7 +65,7 @@ function Hero() {
         </div>
 
         <div className="relative">
-          <div className="relative rounded-[2.5rem] p-1.5 bg-primary-foreground/5 backdrop-blur border border-primary-foreground/10 shadow-2xl kiosk-fade-up" style={{ animationDelay: "0.15s" }}>
+          <div className="relative rounded-[2.5rem] p-1.5 bg-sidebar-foreground/5 backdrop-blur border border-sidebar-foreground/10 shadow-2xl kiosk-fade-up" style={{ animationDelay: "0.15s" }}>
             <img
               src={heroImg}
               alt="Sélection de produits Kiosk"
@@ -152,11 +152,11 @@ function AnimatedStat({ end, suffix, label }: { end: number; suffix: string; lab
 
   return (
     <div ref={ref}>
-      <div className="font-display text-2xl md:text-3xl font-bold text-primary-foreground">
+      <div className="font-display text-2xl md:text-3xl font-bold text-sidebar-foreground">
         {formatCompact(value)}
         <span className="text-accent">{suffix}</span>
       </div>
-      <div className="text-[11px] uppercase tracking-wider text-primary-foreground/60 mt-1">{label}</div>
+      <div className="text-[11px] uppercase tracking-wider text-sidebar-foreground/60 mt-1">{label}</div>
     </div>
   );
 }
@@ -328,7 +328,7 @@ function HowItWorks() {
 function SourcingBanner() {
   return (
     <section className="container-kiosk py-8">
-      <div className="relative overflow-hidden rounded-[2rem] p-8 md:p-14 text-primary-foreground" style={{ background: "var(--gradient-hero)" }}>
+      <div className="relative overflow-hidden rounded-[2rem] p-8 md:p-14 text-sidebar-foreground" style={{ background: "var(--gradient-hero)" }}>
         <div className="absolute -right-10 -top-10 w-64 h-64 rounded-full bg-accent/20 blur-3xl" />
         <div className="relative max-w-2xl">
           <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent/20 border border-accent/30 text-accent text-[11px] font-semibold uppercase tracking-wider">
@@ -338,7 +338,7 @@ function SourcingBanner() {
             Un produit introuvable ?<br />
             <span className="text-accent">Nous le trouvons pour vous.</span>
           </h2>
-          <p className="mt-4 text-primary-foreground/75 max-w-lg">
+          <p className="mt-4 text-sidebar-foreground/75 max-w-lg">
             Décrivez ce que vous cherchez. Notre équipe le source directement chez nos fournisseurs à Guangzhou ou Dubaï et vous propose un devis sous 24h.
           </p>
           <Button asChild size="lg" className="mt-8 rounded-full h-13 px-7 bg-accent text-accent-foreground hover:bg-accent-hover btn-glow">
