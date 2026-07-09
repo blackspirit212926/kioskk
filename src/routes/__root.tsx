@@ -96,11 +96,15 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:title", content: "Kiosk — Importé pour vous. Livré chez vous." },
       {
         property: "og:description",
-        content: "Précommandez vos produits préférés de Chine et Dubaï, livrés directement à Dakar.",
+        content: "Kiosk vous permet de précommander depuis le Sénégal des produits importés directement de Chine et de Dubaï. Sourcing, transport et livraison, tout inclus.",
       },
       { property: "og:type", content: "website" },
       { property: "og:locale", content: "fr_SN" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Kiosk — Importé pour vous. Livré chez vous." },
+      { name: "twitter:description", content: "Kiosk vous permet de précommander depuis le Sénégal des produits importés directement de Chine et de Dubaï. Sourcing, transport et livraison, tout inclus." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/115e324e-13f9-400e-871f-e7d28e932662/id-preview-77979226--6bc34103-b3c2-4400-9b4c-a9c09e8af8f7.lovable.app-1783555676390.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/115e324e-13f9-400e-871f-e7d28e932662/id-preview-77979226--6bc34103-b3c2-4400-9b4c-a9c09e8af8f7.lovable.app-1783555676390.png" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
