@@ -1,10 +1,11 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
-import { ArrowRight, Sparkles, ShieldCheck, Plane, Ship, Search, Package, CreditCard, Truck } from "lucide-react";
+import { ArrowRight, Sparkles, ShieldCheck, Plane, Ship, Search, Package, CreditCard, Truck, Star } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { ProductCard, type ProductCardData } from "@/components/product-card";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { formatCompact } from "@/lib/format";
 import heroImg from "@/assets/hero-products.jpg";
 
@@ -27,84 +28,141 @@ function HomePage() {
 }
 
 /* ============ HERO ============ */
+const TRUST_RIBBONS = ["12 000+ clients satisfaits", "Livraison partout au Sénégal", "Paiement 100% sécurisé"];
+
+const HERO_REVIEWERS = ["AD", "IS", "FN", "MK"];
+
 function Hero() {
   return (
-    <section className="relative overflow-hidden" style={{ background: "var(--gradient-hero)" }}>
-      <div className="absolute inset-0 opacity-[0.04] pointer-events-none"
-           style={{ backgroundImage: "radial-gradient(oklch(1 0 0) 1px, transparent 1px)", backgroundSize: "24px 24px" }} />
+    <section className="pb-16 md:pb-20" style={{ background: "var(--gradient-hero)" }}>
+      <div className="container-kiosk pt-8 md:pt-12">
+        <div
+          className="relative rounded-3xl overflow-hidden min-h-[600px] md:min-h-[720px] kiosk-fade-up"
+          style={{ backgroundImage: `url(${heroImg})`, backgroundSize: "cover", backgroundPosition: "center" }}
+        >
+          <div
+            className="absolute inset-0"
+            style={{ background: "linear-gradient(to right, oklch(0.14 0.09 265 / 0.85), oklch(0.14 0.09 265 / 0.35))" }}
+          />
 
-      <div className="container-kiosk py-16 md:py-28 lg:py-32 grid md:grid-cols-2 gap-10 md:gap-16 items-center">
-        <div className="text-sidebar-foreground kiosk-fade-up">
-          <span
-            className="inline-flex items-center pl-6 pr-4 py-1.5 text-accent text-[11px] font-semibold uppercase tracking-wider"
-            style={{
-              clipPath: "polygon(0 50%, 12% 0, 100% 0, 100% 100%, 12% 100%)",
-              background: "oklch(0.82 0.14 75 / 0.15)",
-            }}
-          >
-            Précommandes ouvertes
-          </span>
-          <h1 className="mt-6 text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-display font-bold leading-[1.05] text-balance-fix">
-            Importé pour vous.{" "}
-            <span className="relative inline-block">
-              <span className="relative z-10 italic font-medium text-accent">Livré chez vous.</span>
-              <svg className="absolute -bottom-2 left-0 w-full" viewBox="0 0 200 12" fill="none" preserveAspectRatio="none">
-                <path d="M2 8 Q 50 2, 100 6 T 198 4" stroke="oklch(0.82 0.14 75)" strokeWidth="3" strokeLinecap="round" />
-              </svg>
-            </span>
-          </h1>
-          <p className="mt-6 text-base md:text-lg text-sidebar-foreground/75 max-w-lg leading-relaxed">
-            Précommandez vos produits préférés directement depuis Guangzhou et Dubaï. Nous les sourçons, les importons et les livrons à votre porte à Dakar.
-          </p>
-          <div className="mt-8 flex flex-col sm:flex-row gap-3">
-            <Button asChild size="lg" variant="default" className="rounded-full h-13 px-7 text-base bg-accent text-accent-foreground hover:bg-accent-hover btn-glow">
-              <Link to="/catalogue">
-                Explorer le catalogue <ArrowRight className="w-4 h-4 ml-1" />
-              </Link>
-            </Button>
-            <Button asChild size="lg" variant="outline" className="rounded-full h-13 px-7 text-base bg-transparent border-sidebar-foreground/25 text-sidebar-foreground hover:bg-sidebar-foreground/10 hover:text-sidebar-foreground">
-              <Link to="/demander-un-produit">Demander un produit</Link>
-            </Button>
-          </div>
-          <CounterRow />
-        </div>
-
-        <div className="relative">
-          <div className="relative rounded-[2.5rem] p-1.5 bg-sidebar-foreground/5 backdrop-blur border border-sidebar-foreground/10 shadow-2xl kiosk-fade-up" style={{ animationDelay: "0.15s" }}>
-            <img
-              src={heroImg}
-              alt="Sélection de produits Kiosk"
-              width={1600}
-              height={1200}
-              className="w-full aspect-[4/3] object-cover rounded-[calc(2.5rem-6px)]"
-            />
-          </div>
-
-          <div className="hidden md:flex absolute -left-8 top-8 bg-background/95 backdrop-blur rounded-2xl p-4 shadow-xl border border-border max-w-[220px] kiosk-fade-up" style={{ animationDelay: "0.4s" }}>
-            <div className="flex gap-3">
-              <div className="w-10 h-10 rounded-full bg-success/15 text-success flex items-center justify-center flex-shrink-0">
-                <ShieldCheck className="w-5 h-5" />
+          <div className="relative h-full flex items-center px-6 md:px-12 lg:px-16 py-16">
+            <div className="max-w-xl text-sidebar-foreground">
+              <h1 className="font-display font-bold text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-[1.05] text-balance-fix">
+                Importé pour vous.
+                <br />
+                <span className="relative inline-block">
+                  <span className="relative z-10 italic font-medium text-accent">Livré chez vous.</span>
+                  <svg className="absolute -bottom-2 left-0 w-full" viewBox="0 0 200 12" fill="none" preserveAspectRatio="none">
+                    <path d="M2 8 Q 50 2, 100 6 T 198 4" stroke="oklch(0.82 0.14 75)" strokeWidth="3" strokeLinecap="round" />
+                  </svg>
+                </span>
+              </h1>
+              <p className="mt-6 text-base md:text-lg text-sidebar-foreground/80 max-w-md leading-relaxed">
+                Précommandez vos produits préférés directement depuis Guangzhou et Dubaï. Nous les sourçons, les importons et les livrons à votre porte à Dakar.
+              </p>
+              <div className="mt-8 flex flex-col sm:flex-row gap-3">
+                <Button asChild size="lg" variant="default" className="rounded-full h-13 px-7 text-base bg-accent text-accent-foreground hover:bg-accent-hover btn-glow">
+                  <Link to="/catalogue">
+                    Explorer le catalogue <ArrowRight className="w-4 h-4 ml-1" />
+                  </Link>
+                </Button>
+                <Button asChild size="lg" variant="outline" className="rounded-full h-13 px-7 text-base bg-transparent border-sidebar-foreground/25 text-sidebar-foreground hover:bg-sidebar-foreground/10 hover:text-sidebar-foreground">
+                  <Link to="/demander-un-produit">Demander un produit</Link>
+                </Button>
               </div>
-              <div>
-                <div className="text-xs font-semibold">Paiement sécurisé</div>
-                <div className="text-[11px] text-muted-foreground mt-0.5">Wave, Orange Money, Free Money</div>
-              </div>
+              <CounterRow />
             </div>
           </div>
 
-          <div className="hidden md:block absolute -right-6 bottom-10 kiosk-fade-up" style={{ animationDelay: "0.55s" }}>
-            <svg className="absolute right-full top-1/2 -translate-y-1/2 w-10 h-16 pointer-events-none" viewBox="0 0 40 64" fill="none" preserveAspectRatio="none">
-              <path d="M38 2 Q 38 32, 2 62" stroke="oklch(0.82 0.14 75)" strokeWidth="2" strokeDasharray="4 4" strokeLinecap="round" />
-            </svg>
-            <div className="bg-background rounded-2xl p-4 shadow-xl border border-border max-w-[200px]">
-              <div className="text-[11px] text-muted-foreground">À partir de</div>
-              <div className="font-display font-bold text-xl text-primary">12 500 FCFA</div>
-              <div className="text-[11px] text-muted-foreground mt-1">Écouteurs Bluetooth Pro</div>
+          <div className="hidden md:flex absolute left-6 lg:left-16 bottom-28 flex-col gap-2 kiosk-fade-up" style={{ animationDelay: "0.4s" }}>
+            {TRUST_RIBBONS.map((label) => (
+              <div
+                key={label}
+                className="inline-flex items-center pl-5 pr-4 py-2 text-xs font-medium text-sidebar-foreground bg-sidebar-foreground/10 backdrop-blur w-fit"
+                style={{ clipPath: "polygon(0 50%, 8% 0, 100% 0, 100% 100%, 8% 100%)" }}
+              >
+                {label}
+              </div>
+            ))}
+          </div>
+
+          <div className="hidden md:flex absolute top-6 right-6 items-center gap-3 kiosk-fade-up" style={{ animationDelay: "0.15s" }}>
+            <div className="flex -space-x-3">
+              {HERO_REVIEWERS.map((initials) => (
+                <Avatar key={initials} className="w-9 h-9 border-2 border-sidebar-foreground/20">
+                  <AvatarFallback className="bg-accent/20 text-accent text-xs font-semibold">{initials}</AvatarFallback>
+                </Avatar>
+              ))}
+            </div>
+            <div>
+              <div className="flex gap-0.5 text-accent">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <Star key={i} className="w-3.5 h-3.5 fill-current" />
+                ))}
+              </div>
+              <div className="text-xs text-sidebar-foreground/80 mt-0.5">4.9 · Basé sur 2 400+ avis</div>
             </div>
           </div>
+
+          <HeroSearchBar variant="desktop" />
         </div>
+
+        <HeroSearchBar variant="mobile" />
       </div>
     </section>
+  );
+}
+
+function HeroSearchBar({ variant }: { variant: "desktop" | "mobile" }) {
+  const navigate = useNavigate();
+  const [query, setQuery] = useState("");
+  const [origin, setOrigin] = useState<"CN" | "AE" | undefined>(undefined);
+
+  const handleSearch = () => {
+    navigate({ to: "/catalogue", search: { q: query.trim() || undefined, origine: origin } });
+  };
+
+  const wrapperClassName =
+    variant === "desktop"
+      ? "hidden md:flex md:items-center absolute left-1/2 -translate-x-1/2 -bottom-8 z-10 w-full max-w-2xl rounded-full bg-card shadow-elevated border border-border overflow-hidden"
+      : "flex md:hidden flex-col mt-6 rounded-3xl bg-card shadow-elevated border border-border overflow-hidden";
+
+  return (
+    <div className={wrapperClassName}>
+      <div className="flex-1 flex items-center gap-2 px-6 py-4 w-full">
+        <Search className="w-4 h-4 text-muted-foreground flex-shrink-0" />
+        <input
+          type="text"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+          placeholder="Rechercher un produit..."
+          className="w-full bg-transparent text-sm text-foreground outline-none placeholder:text-muted-foreground"
+        />
+      </div>
+      <div className={variant === "desktop" ? "w-px h-8 bg-border self-center" : "border-t border-border"} />
+      <div className="flex items-center gap-4 px-6 py-3 md:py-4 text-sm">
+        {(["CN", "AE"] as const).map((code) => (
+          <button
+            key={code}
+            onClick={() => setOrigin(origin === code ? undefined : code)}
+            className={`font-medium transition-colors ${origin === code ? "text-primary" : "text-muted-foreground hover:text-foreground"}`}
+          >
+            {code === "CN" ? "Chine" : "Dubaï"}
+          </button>
+        ))}
+      </div>
+      <button
+        onClick={handleSearch}
+        className={
+          variant === "desktop"
+            ? "m-1.5 inline-flex items-center justify-center rounded-full bg-primary text-primary-foreground px-6 py-3 text-sm font-medium hover:bg-primary-light transition-colors flex-shrink-0"
+            : "mx-4 mb-4 inline-flex items-center justify-center rounded-full bg-primary text-primary-foreground px-6 py-3 text-sm font-medium hover:bg-primary-light transition-colors"
+        }
+      >
+        Rechercher
+      </button>
+    </div>
   );
 }
 
