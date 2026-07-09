@@ -1,9 +1,8 @@
-import { ThemeToggle } from "@/components/theme-toggle";
-
 import { Link, useLocation } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Heart, Menu, Search, ShoppingBag, User, X, LogOut, Package } from "lucide-react";
 import { KioskLogo } from "./kiosk-logo";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/contexts/cart-context";
 import { useCurrency } from "@/contexts/currency-context";
@@ -74,8 +73,8 @@ export function Navbar() {
         </nav>
 
         <div className="flex-1" />
-<ThemeToggle />
 
+        <ThemeToggle className="hidden md:inline-flex" />
 
         {/* Currency selector */}
         <DropdownMenu>
@@ -201,6 +200,10 @@ export function Navbar() {
                 </Link>
               </nav>
               <div className="mt-auto pb-6">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="text-xs uppercase tracking-widest text-muted-foreground">Apparence</div>
+                  <ThemeToggle />
+                </div>
                 <div className="text-xs uppercase tracking-widest text-muted-foreground mb-3">Devise</div>
                 <div className="grid grid-cols-3 gap-2">
                   {(Object.keys(CURRENCY_META) as Currency[]).map((c) => (
