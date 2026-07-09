@@ -67,6 +67,18 @@ function ProductPage() {
 
   const heroImage = resolveImage(images[activeImageIdx]?.url ?? images[0]?.url);
 
+  const thumbnailButtons = images.slice(0, 5).map((img, i) => (
+    <button
+      key={img.url + i}
+      onClick={() => setActiveImageIdx(i)}
+      className={`aspect-square rounded-2xl overflow-hidden border-2 transition-all ${
+        activeImageIdx === i ? "border-primary" : "border-transparent opacity-60 hover:opacity-100"
+      }`}
+    >
+      <img src={resolveImage(img.url)} alt="" className="w-full h-full object-cover" loading="lazy" />
+    </button>
+  ));
+
   const handleAdd = () => {
     if (variants.length > 0 && !selectedVariantId) {
       toast.error("Veuillez sélectionner une option");
@@ -89,6 +101,17 @@ function ProductPage() {
     openDrawer();
   };
 
+  const actionButtons = (
+    <>
+      <Button onClick={handleAdd} size="lg" variant="outline" className="rounded-full h-13 px-6 flex-1">
+        <ShoppingBag className="w-4 h-4 mr-2" /> Ajouter au panier
+      </Button>
+      <Button onClick={handleBuyNow} size="lg" className="rounded-full h-13 px-6 flex-1 btn-glow">
+        <Zap className="w-4 h-4 mr-2" /> Commander maintenant
+      </Button>
+    </>
+  );
+
   const handleShare = async () => {
     const url = window.location.href;
     if (navigator.share) {
@@ -100,7 +123,7 @@ function ProductPage() {
   };
 
   return (
-    <div className="container-kiosk py-6 md:py-10">
+    <div className="container-kiosk py-6 md:py-10 pb-24 md:pb-0">
       <Link to="/catalogue" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-6">
         <ArrowLeft className="w-4 h-4" /> Retour au catalogue
       </Link>
@@ -108,42 +131,33 @@ function ProductPage() {
       <div className="grid md:grid-cols-2 gap-8 lg:gap-16">
         {/* Gallery */}
         <div className="md:sticky md:top-24 md:self-start">
-          <div className="relative aspect-square rounded-3xl overflow-hidden bg-surface border border-border/60">
-            <img
-              src={heroImage}
-              alt={product.name}
-              width={1200}
-              height={1200}
-              className="w-full h-full object-cover"
-            />
-            <div className="absolute top-4 left-4 flex flex-col gap-2">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-background/95 backdrop-blur text-xs font-medium">
-                <span>{origin.flag}</span> {origin.label}
-              </span>
+          <div className="flex flex-col md:flex-row gap-3">
+            {images.length > 1 && (
+              <div className="hidden md:flex flex-col gap-2 w-16 md:w-20 flex-shrink-0">{thumbnailButtons}</div>
+            )}
+            <div className="relative aspect-square rounded-3xl overflow-hidden bg-surface border border-border/60 flex-1">
+              <img
+                src={heroImage}
+                alt={product.name}
+                width={1200}
+                height={1200}
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute top-4 left-4 flex flex-col gap-2">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-background/95 backdrop-blur text-xs font-medium">
+                  <span>{origin.flag}</span> {origin.label}
+                </span>
+              </div>
+              <button
+                onClick={() => toggle(product.id, product.name)}
+                aria-label="Favori"
+                className="absolute top-4 right-4 w-11 h-11 rounded-full bg-background/95 backdrop-blur hover:bg-background flex items-center justify-center transition-transform hover:scale-110"
+              >
+                <Heart className={`w-5 h-5 ${fav ? "fill-destructive text-destructive" : ""}`} />
+              </button>
             </div>
-            <button
-              onClick={() => toggle(product.id, product.name)}
-              aria-label="Favori"
-              className="absolute top-4 right-4 w-11 h-11 rounded-full bg-background/95 backdrop-blur hover:bg-background flex items-center justify-center transition-transform hover:scale-110"
-            >
-              <Heart className={`w-5 h-5 ${fav ? "fill-destructive text-destructive" : ""}`} />
-            </button>
           </div>
-          {images.length > 1 && (
-            <div className="mt-3 grid grid-cols-5 gap-2">
-              {images.slice(0, 5).map((img, i) => (
-                <button
-                  key={img.url + i}
-                  onClick={() => setActiveImageIdx(i)}
-                  className={`aspect-square rounded-2xl overflow-hidden border-2 transition-all ${
-                    activeImageIdx === i ? "border-primary" : "border-transparent opacity-60 hover:opacity-100"
-                  }`}
-                >
-                  <img src={resolveImage(img.url)} alt="" className="w-full h-full object-cover" loading="lazy" />
-                </button>
-              ))}
-            </div>
-          )}
+          {images.length > 1 && <div className="mt-3 grid grid-cols-5 gap-2 md:hidden">{thumbnailButtons}</div>}
         </div>
 
         {/* Details */}
@@ -237,13 +251,9 @@ function ProductPage() {
           </div>
 
           {/* Actions */}
-          <div className="mt-6 flex flex-col sm:flex-row gap-3">
-            <Button onClick={handleAdd} size="lg" variant="outline" className="rounded-full h-13 px-6 flex-1">
-              <ShoppingBag className="w-4 h-4 mr-2" /> Ajouter au panier
-            </Button>
-            <Button onClick={handleBuyNow} size="lg" className="rounded-full h-13 px-6 flex-1 btn-glow">
-              <Zap className="w-4 h-4 mr-2" /> Commander maintenant
-            </Button>
+          <div className="mt-6 hidden md:flex flex-row gap-3">{actionButtons}</div>
+          <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 glass-panel-strong flex flex-row gap-3 p-4 pb-[calc(1rem+env(safe-area-inset-bottom))]">
+            {actionButtons}
           </div>
 
           <div className="mt-3 flex gap-3">
