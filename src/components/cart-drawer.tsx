@@ -113,7 +113,7 @@ export function CartDrawer() {
                 <span className="font-display text-2xl font-bold">{formatPrice(subtotalXof, currency, rates)}</span>
               </div>
               <Button asChild size="lg" className="w-full rounded-full h-12 text-base" onClick={closeDrawer}>
-                <Link to="/panier">Passer commande</Link>
+                <Link to="/checkout" onClick={closeDrawer}>Passer commande</Link>
               </Button>
               <button
                 onClick={closeDrawer}
