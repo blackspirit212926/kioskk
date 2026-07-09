@@ -4,12 +4,12 @@ import { KioskLogo } from "./kiosk-logo";
 
 export function Footer() {
   return (
-    <footer className="mt-24 bg-primary text-primary-foreground">
+    <footer className="mt-24 bg-sidebar text-sidebar-foreground">
       <div className="container-kiosk py-16">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-10">
           <div className="col-span-2 md:col-span-1">
             <KioskLogo variant="dark" />
-            <p className="mt-4 text-sm text-primary-foreground/70 leading-relaxed max-w-xs">
+            <p className="mt-4 text-sm text-sidebar-foreground/70 leading-relaxed max-w-xs">
               Importé pour vous. Livré chez vous. La nouvelle façon d'acheter à l'international depuis le Sénégal.
             </p>
             <div className="flex gap-3 mt-6">
@@ -17,7 +17,7 @@ export function Footer() {
                 <a
                   key={i}
                   href="#"
-                  className="w-10 h-10 rounded-full bg-primary-foreground/10 hover:bg-accent hover:text-accent-foreground transition-colors flex items-center justify-center"
+                  className="w-10 h-10 rounded-full bg-sidebar-foreground/10 hover:bg-accent hover:text-accent-foreground transition-colors flex items-center justify-center"
                   aria-label="Réseau social"
                 >
                   <Icon className="w-4 h-4" />
@@ -55,12 +55,12 @@ export function Footer() {
           />
         </div>
 
-        <div className="mt-14 pt-8 border-t border-primary-foreground/10 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 text-xs text-primary-foreground/60">
+        <div className="mt-14 pt-8 border-t border-sidebar-foreground/10 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 text-xs text-sidebar-foreground/60">
           <div>© {new Date().getFullYear()} Kiosk. Tous droits réservés. Dakar, Sénégal.</div>
           <div className="flex gap-6">
-            <Link to="#" className="hover:text-primary-foreground">Mentions légales</Link>
-            <Link to="#" className="hover:text-primary-foreground">Confidentialité</Link>
-            <Link to="#" className="hover:text-primary-foreground">CGV</Link>
+            <Link to="#" className="hover:text-sidebar-foreground">Mentions légales</Link>
+            <Link to="#" className="hover:text-sidebar-foreground">Confidentialité</Link>
+            <Link to="#" className="hover:text-sidebar-foreground">CGV</Link>
           </div>
         </div>
       </div>
@@ -71,11 +71,11 @@ export function Footer() {
 function FooterCol({ title, links }: { title: string; links: { to: string; label: string }[] }) {
   return (
     <div>
-      <h4 className="text-sm font-semibold uppercase tracking-wider text-primary-foreground/50 mb-4">{title}</h4>
+      <h4 className="text-sm font-semibold uppercase tracking-wider text-sidebar-foreground/50 mb-4">{title}</h4>
       <ul className="space-y-3">
         {links.map((l) => (
           <li key={l.label}>
-            <Link to={l.to} className="text-sm text-primary-foreground/80 hover:text-accent transition-colors">
+            <Link to={l.to} className="text-sm text-sidebar-foreground/80 hover:text-accent transition-colors">
               {l.label}
             </Link>
           </li>
