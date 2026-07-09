@@ -1,13 +1,9 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { useEffect, useRef, useState } from "react";
-import { ArrowRight, Sparkles, ShieldCheck, Plane, Ship, Search, Package, CreditCard, Truck, Star } from "lucide-react";
+import { ArrowRight, Sparkles, ShieldCheck, Ship, Search, Package, CreditCard, Truck, Star, TrendingUp } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { ProductCard, type ProductCardData } from "@/components/product-card";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { formatCompact } from "@/lib/format";
-import heroImg from "@/assets/hero-products.jpg";
 
 export const Route = createFileRoute("/")({
   component: HomePage,
@@ -17,7 +13,7 @@ function HomePage() {
   return (
     <>
       <Hero />
-      <TrustStrip />
+      <StatsBar />
       <Categories />
       <FeaturedProducts />
       <HowItWorks />
@@ -28,221 +24,126 @@ function HomePage() {
 }
 
 /* ============ HERO ============ */
-const TRUST_RIBBONS = ["12 000+ clients satisfaits", "Livraison partout au Sénégal", "Paiement 100% sécurisé"];
-
-const HERO_REVIEWERS = ["AD", "IS", "FN", "MK"];
-
 function Hero() {
   return (
-    <section className="pb-16 md:pb-20" style={{ background: "var(--gradient-hero)" }}>
-      <div className="container-kiosk pt-8 md:pt-12">
-        <div
-          className="relative rounded-3xl overflow-hidden min-h-[600px] md:min-h-[720px] kiosk-fade-up"
-          style={{ backgroundImage: `url(${heroImg})`, backgroundSize: "cover", backgroundPosition: "center" }}
+    <section className="relative overflow-hidden bg-background pt-16 md:pt-24 pb-20 md:pb-28">
+      <div
+        className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[700px] rounded-full blur-3xl opacity-40 pointer-events-none"
+        style={{ background: "radial-gradient(circle, oklch(0.82 0.14 75 / 0.35), oklch(0.22 0.10 275 / 0.25) 55%, transparent 75%)" }}
+      />
+
+      <div className="container-kiosk relative text-center max-w-5xl mx-auto kiosk-fade-up">
+        <span
+          className="inline-flex items-center pl-5 pr-4 py-1.5 text-accent text-[11px] font-semibold uppercase tracking-wider"
+          style={{
+            clipPath: "polygon(0 50%, 8% 0, 100% 0, 100% 100%, 8% 100%)",
+            background: "oklch(0.82 0.14 75 / 0.15)",
+          }}
         >
-          <div
-            className="absolute inset-0"
-            style={{ background: "linear-gradient(to right, oklch(0.14 0.09 265 / 0.85), oklch(0.14 0.09 265 / 0.35))" }}
-          />
+          Précommandes ouvertes — Chine & Dubaï
+        </span>
 
-          <div className="relative h-full flex items-center px-6 md:px-12 lg:px-16 py-16">
-            <div className="max-w-xl text-sidebar-foreground">
-              <h1 className="font-display font-bold text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-[1.05] text-balance-fix">
-                Importé pour vous.
-                <br />
-                <span className="relative inline-block">
-                  <span className="relative z-10 italic font-medium text-accent">Livré chez vous.</span>
-                  <svg className="absolute -bottom-2 left-0 w-full" viewBox="0 0 200 12" fill="none" preserveAspectRatio="none">
-                    <path d="M2 8 Q 50 2, 100 6 T 198 4" stroke="oklch(0.82 0.14 75)" strokeWidth="3" strokeLinecap="round" />
-                  </svg>
-                </span>
-              </h1>
-              <p className="mt-6 text-base md:text-lg text-sidebar-foreground/80 max-w-md leading-relaxed">
-                Précommandez vos produits préférés directement depuis Guangzhou et Dubaï. Nous les sourçons, les importons et les livrons à votre porte à Dakar.
-              </p>
-              <div className="mt-8 flex flex-col sm:flex-row gap-3">
-                <Button asChild size="lg" variant="default" className="rounded-full h-13 px-7 text-base bg-accent text-accent-foreground hover:bg-accent-hover btn-glow">
-                  <Link to="/catalogue">
-                    Explorer le catalogue <ArrowRight className="w-4 h-4 ml-1" />
-                  </Link>
-                </Button>
-                <Button asChild size="lg" variant="outline" className="rounded-full h-13 px-7 text-base bg-transparent border-sidebar-foreground/25 text-sidebar-foreground hover:bg-sidebar-foreground/10 hover:text-sidebar-foreground">
-                  <Link to="/demander-un-produit">Demander un produit</Link>
-                </Button>
-              </div>
-              <CounterRow />
-            </div>
-          </div>
+        <h1 className="mt-6 font-display font-bold tracking-tight text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-[1.05] text-balance-fix">
+          Précommandez.
+          <br />
+          Recevez, <span className="italic font-medium text-accent">sans stress.</span>
+        </h1>
 
-          <div className="hidden md:flex absolute left-6 lg:left-16 bottom-28 flex-col gap-2 kiosk-fade-up" style={{ animationDelay: "0.4s" }}>
-            {TRUST_RIBBONS.map((label) => (
-              <div
-                key={label}
-                className="inline-flex items-center pl-5 pr-4 py-2 text-xs font-medium text-sidebar-foreground bg-sidebar-foreground/10 backdrop-blur w-fit"
-                style={{ clipPath: "polygon(0 50%, 8% 0, 100% 0, 100% 100%, 8% 100%)" }}
-              >
-                {label}
-              </div>
-            ))}
-          </div>
+        <p className="mt-6 text-base md:text-lg text-muted-foreground max-w-xl mx-auto leading-relaxed">
+          Précommandez vos produits préférés directement depuis Guangzhou et Dubaï. Nous les sourçons, les importons et les livrons à votre porte à Dakar.
+        </p>
 
-          <div className="hidden md:flex absolute top-6 right-6 items-center gap-3 kiosk-fade-up" style={{ animationDelay: "0.15s" }}>
-            <div className="flex -space-x-3">
-              {HERO_REVIEWERS.map((initials) => (
-                <Avatar key={initials} className="w-9 h-9 border-2 border-sidebar-foreground/20">
-                  <AvatarFallback className="bg-accent/20 text-accent text-xs font-semibold">{initials}</AvatarFallback>
-                </Avatar>
-              ))}
-            </div>
-            <div>
-              <div className="flex gap-0.5 text-accent">
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <Star key={i} className="w-3.5 h-3.5 fill-current" />
-                ))}
-              </div>
-              <div className="text-xs text-sidebar-foreground/80 mt-0.5">4.9 · Basé sur 2 400+ avis</div>
-            </div>
-          </div>
-
-          <HeroSearchBar variant="desktop" />
+        <div className="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
+          <Button asChild size="lg" variant="default" className="rounded-full h-13 px-7 text-base bg-primary text-primary-foreground hover:bg-primary-light btn-glow">
+            <Link to="/catalogue">
+              Explorer le catalogue <ArrowRight className="w-4 h-4 ml-1" />
+            </Link>
+          </Button>
+          <Button asChild size="lg" variant="outline" className="rounded-full h-13 px-7 text-base border-2 bg-transparent">
+            <Link to="/demander-un-produit">Demander un produit</Link>
+          </Button>
         </div>
 
-        <HeroSearchBar variant="mobile" />
+        <HeroPhoneMockup />
       </div>
     </section>
   );
 }
 
-function HeroSearchBar({ variant }: { variant: "desktop" | "mobile" }) {
-  const navigate = useNavigate();
-  const [query, setQuery] = useState("");
-  const [origin, setOrigin] = useState<"CN" | "AE" | undefined>(undefined);
-
-  const handleSearch = () => {
-    navigate({ to: "/catalogue", search: { q: query.trim() || undefined, origine: origin } });
-  };
-
-  const wrapperClassName =
-    variant === "desktop"
-      ? "hidden md:flex md:items-center absolute left-1/2 -translate-x-1/2 -bottom-8 z-10 w-full max-w-2xl rounded-full bg-card shadow-elevated border border-border overflow-hidden"
-      : "flex md:hidden flex-col mt-6 rounded-3xl bg-card shadow-elevated border border-border overflow-hidden";
-
+function HeroPhoneMockup() {
   return (
-    <div className={wrapperClassName}>
-      <div className="flex-1 flex items-center gap-2 px-6 py-4 w-full">
-        <Search className="w-4 h-4 text-muted-foreground flex-shrink-0" />
-        <input
-          type="text"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-          placeholder="Rechercher un produit..."
-          className="w-full bg-transparent text-sm text-foreground outline-none placeholder:text-muted-foreground"
-        />
-      </div>
-      <div className={variant === "desktop" ? "w-px h-8 bg-border self-center" : "border-t border-border"} />
-      <div className="flex items-center gap-4 px-6 py-3 md:py-4 text-sm">
-        {(["CN", "AE"] as const).map((code) => (
-          <button
-            key={code}
-            onClick={() => setOrigin(origin === code ? undefined : code)}
-            className={`font-medium transition-colors ${origin === code ? "text-primary" : "text-muted-foreground hover:text-foreground"}`}
-          >
-            {code === "CN" ? "Chine" : "Dubaï"}
-          </button>
-        ))}
-      </div>
-      <button
-        onClick={handleSearch}
-        className={
-          variant === "desktop"
-            ? "m-1.5 inline-flex items-center justify-center rounded-full bg-primary text-primary-foreground px-6 py-3 text-sm font-medium hover:bg-primary-light transition-colors flex-shrink-0"
-            : "mx-4 mb-4 inline-flex items-center justify-center rounded-full bg-primary text-primary-foreground px-6 py-3 text-sm font-medium hover:bg-primary-light transition-colors"
-        }
+    <div className="relative mt-16 md:mt-20 max-w-md mx-auto">
+      <div
+        className="relative mx-auto w-64 rounded-[2.5rem] bg-sidebar border-[6px] border-primary shadow-2xl overflow-hidden kiosk-fade-up"
+        style={{ animationDelay: "0.15s" }}
       >
-        Rechercher
-      </button>
-    </div>
-  );
-}
-
-function CounterRow() {
-  const stats = [
-    { end: 12400, suffix: "+", label: "Clients satisfaits" },
-    { end: 3200, suffix: "+", label: "Produits importés" },
-    { end: 98, suffix: "%", label: "Livraisons à l'heure" },
-  ];
-  return (
-    <div className="mt-10 grid grid-cols-3 gap-6 max-w-md">
-      {stats.map((s) => (
-        <AnimatedStat key={s.label} end={s.end} suffix={s.suffix} label={s.label} />
-      ))}
-    </div>
-  );
-}
-
-function AnimatedStat({ end, suffix, label }: { end: number; suffix: string; label: string }) {
-  const [value, setValue] = useState(0);
-  const ref = useRef<HTMLDivElement>(null);
-  const started = useRef(false);
-
-  useEffect(() => {
-    if (!ref.current) return;
-    const el = ref.current;
-    const obs = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting && !started.current) {
-            started.current = true;
-            const duration = 1400;
-            const start = performance.now();
-            const tick = (now: number) => {
-              const p = Math.min(1, (now - start) / duration);
-              const eased = 1 - Math.pow(1 - p, 3);
-              setValue(Math.round(end * eased));
-              if (p < 1) requestAnimationFrame(tick);
-            };
-            requestAnimationFrame(tick);
-          }
-        });
-      },
-      { threshold: 0.4 },
-    );
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, [end]);
-
-  return (
-    <div ref={ref}>
-      <div className="font-display text-2xl md:text-3xl font-bold text-sidebar-foreground">
-        {formatCompact(value)}
-        <span className="text-accent">{suffix}</span>
+        <div className="p-5 pt-8">
+          <div className="text-xs font-semibold text-sidebar-foreground/60 uppercase tracking-widest">Kiosk</div>
+          <div className="mt-1 text-sm font-semibold text-sidebar-foreground">Suivi de commande</div>
+          <div className="mt-6 h-2 rounded-full bg-sidebar-foreground/15 overflow-hidden">
+            <div className="h-full rounded-full bg-accent" style={{ width: "65%" }} />
+          </div>
+          <div className="mt-3 text-xs text-sidebar-foreground/70">En transit — Chine → Dakar</div>
+        </div>
       </div>
-      <div className="text-[11px] uppercase tracking-wider text-sidebar-foreground/60 mt-1">{label}</div>
+
+      <div
+        className="hidden md:flex absolute -left-16 top-4 glass-panel rounded-2xl p-4 max-w-[200px] items-start gap-3 kiosk-fade-up"
+        style={{ animationDelay: "0.3s" }}
+      >
+        <div className="w-9 h-9 rounded-full bg-success/15 text-success flex items-center justify-center flex-shrink-0">
+          <ShieldCheck className="w-4.5 h-4.5" />
+        </div>
+        <div>
+          <div className="text-xs font-semibold">Paiement confirmé</div>
+          <div className="text-[11px] text-muted-foreground mt-0.5">Wave · 45 000 FCFA</div>
+        </div>
+      </div>
+
+      <div
+        className="hidden md:block absolute -right-16 top-1/3 glass-panel rounded-2xl p-4 max-w-[180px] kiosk-fade-up"
+        style={{ animationDelay: "0.45s" }}
+      >
+        <div className="flex gap-0.5 text-accent">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <Star key={i} className="w-3.5 h-3.5 fill-current" />
+          ))}
+        </div>
+        <div className="text-xs font-semibold mt-1">4.9 · 2 400+ avis</div>
+      </div>
+
+      <div
+        className="hidden md:flex absolute -right-10 bottom-0 glass-panel rounded-2xl p-4 max-w-[190px] items-start gap-3 kiosk-fade-up"
+        style={{ animationDelay: "0.6s" }}
+      >
+        <div className="w-9 h-9 rounded-full bg-accent/20 text-primary flex items-center justify-center flex-shrink-0">
+          <TrendingUp className="w-4.5 h-4.5" />
+        </div>
+        <div>
+          <div className="text-xs font-semibold">98% à l'heure</div>
+          <div className="text-[11px] text-muted-foreground mt-0.5">Livraisons Kiosk</div>
+        </div>
+      </div>
     </div>
   );
 }
 
-/* ============ TRUST STRIP ============ */
-function TrustStrip() {
-  const items = [
-    { icon: Ship, label: "Fret maritime", desc: "30–60 j · économique" },
-    { icon: Plane, label: "Fret aérien", desc: "10–20 j · rapide" },
-    { icon: ShieldCheck, label: "Paiement sécurisé", desc: "Wave, OM, Free Money" },
-    { icon: Truck, label: "Livraison à Dakar", desc: "À domicile ou point relais" },
-  ];
+/* ============ STATS BAR ============ */
+const STATS = [
+  { value: "12 000+", label: "Clients satisfaits" },
+  { value: "2", label: "Pays sourcés" },
+  { value: "98%", label: "Livraisons à l'heure" },
+  { value: "100%", label: "Paiement sécurisé" },
+];
+
+function StatsBar() {
   return (
     <section className="container-kiosk -mt-8 md:-mt-12 relative z-10">
-      <div className="rounded-3xl bg-card border border-border shadow-soft p-4 md:p-6 grid grid-cols-2 md:grid-cols-4 gap-4">
-        {items.map(({ icon: Icon, label, desc }) => (
-          <div key={label} className="flex items-start gap-3">
-            <div className="w-11 h-11 rounded-2xl bg-accent/15 text-primary flex items-center justify-center flex-shrink-0">
-              <Icon className="w-5 h-5" />
-            </div>
-            <div>
-              <div className="text-sm font-semibold">{label}</div>
-              <div className="text-xs text-muted-foreground mt-0.5">{desc}</div>
-            </div>
+      <div className="rounded-3xl border border-border shadow-elevated grid grid-cols-2 md:grid-cols-4 gap-px bg-border overflow-hidden">
+        {STATS.map((s) => (
+          <div key={s.label} className="bg-card p-6 text-center">
+            <div className="font-display font-bold text-2xl md:text-3xl text-primary">{s.value}</div>
+            <div className="mt-1 text-xs text-muted-foreground">{s.label}</div>
           </div>
         ))}
       </div>
