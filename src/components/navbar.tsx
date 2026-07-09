@@ -1,3 +1,5 @@
+import { ThemeToggle } from "@/components/theme-toggle";
+
 import { Link, useLocation } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Heart, Menu, Search, ShoppingBag, User, X, LogOut, Package } from "lucide-react";
