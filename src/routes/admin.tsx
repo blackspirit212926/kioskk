@@ -10,10 +10,10 @@ export const Route = createFileRoute("/admin")({
   head: () => ({ meta: [{ title: "Admin — Kiosk" }, { name: "robots", content: "noindex" }] }),
 });
 
-const NAV = [
+const NAV: { to: string; label: string; icon: typeof LayoutDashboard; exact?: boolean }[] = [
   { to: "/admin", label: "Tableau de bord", icon: LayoutDashboard, exact: true },
   { to: "/admin/soldes", label: "Soldes clients", icon: Wallet },
-] as const;
+];
 
 function AdminLayout() {
   const { user, loading } = useAuth();
