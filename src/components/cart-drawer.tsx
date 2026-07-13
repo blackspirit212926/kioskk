@@ -75,28 +75,28 @@ export function CartDrawer() {
                     <div className="mt-2 flex items-center gap-2">
                       <div className="inline-flex items-center border border-border rounded-full">
                         <button
-                          aria-label="Diminuer"
+                          aria-label={`Diminuer la quantité de ${item.name}`}
                           onClick={() => updateQuantity(item.productId, item.variantId, item.quantity - 1)}
                           disabled={item.quantity <= 1}
-                          className="w-7 h-7 flex items-center justify-center disabled:opacity-40 hover:bg-surface rounded-full"
+                          className="w-9 h-9 flex items-center justify-center disabled:opacity-40 hover:bg-surface rounded-l-full"
                         >
-                          <Minus className="w-3 h-3" />
+                          <Minus className="w-3.5 h-3.5" aria-hidden="true" />
                         </button>
-                        <span className="min-w-6 text-center text-sm font-medium">{item.quantity}</span>
+                        <span className="min-w-7 text-center text-sm font-medium tabular-nums" aria-live="polite">{item.quantity}</span>
                         <button
-                          aria-label="Augmenter"
+                          aria-label={`Augmenter la quantité de ${item.name}`}
                           onClick={() => updateQuantity(item.productId, item.variantId, item.quantity + 1)}
-                          className="w-7 h-7 flex items-center justify-center hover:bg-surface rounded-full"
+                          className="w-9 h-9 flex items-center justify-center hover:bg-surface rounded-r-full"
                         >
-                          <Plus className="w-3 h-3" />
+                          <Plus className="w-3.5 h-3.5" aria-hidden="true" />
                         </button>
                       </div>
                       <button
-                        aria-label="Retirer"
+                        aria-label={`Retirer ${item.name}`}
                         onClick={() => removeItem(item.productId, item.variantId)}
-                        className="ml-auto w-8 h-8 flex items-center justify-center rounded-full hover:bg-destructive/10 text-muted-foreground hover:text-destructive transition-colors"
+                        className="ml-auto w-10 h-10 flex items-center justify-center rounded-full hover:bg-destructive/10 text-muted-foreground hover:text-destructive transition-colors"
                       >
-                        <Trash2 className="w-3.5 h-3.5" />
+                        <Trash2 className="w-4 h-4" aria-hidden="true" />
                       </button>
                     </div>
                   </div>
