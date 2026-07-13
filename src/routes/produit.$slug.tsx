@@ -101,10 +101,21 @@ function ProductPage() {
     openDrawer();
   };
 
+  const groupBuyActive =
+    product.group_buy_enabled &&
+    product.group_buy_threshold &&
+    (!product.group_buy_deadline || new Date(product.group_buy_deadline) > new Date());
+  const groupBuyPct = groupBuyActive
+    ? Math.min(100, Math.round((product.group_buy_current / (product.group_buy_threshold ?? 1)) * 100))
+    : 0;
+  const daysLeft = product.group_buy_deadline
+    ? Math.max(0, Math.ceil((new Date(product.group_buy_deadline).getTime() - Date.now()) / 86400000))
+    : null;
+
   const actionButtons = (
     <>
       <Button onClick={handleAdd} size="lg" variant="outline" className="rounded-full h-13 px-6 flex-1">
-        <ShoppingBag className="w-4 h-4 mr-2" /> Ajouter au panier
+        <ShoppingBag className="w-4 h-4 mr-2" /> {groupBuyActive ? "Rejoindre l'achat groupé" : "Ajouter au panier"}
       </Button>
       <Button onClick={handleBuyNow} size="lg" className="rounded-full h-13 px-6 flex-1 btn-glow">
         <Zap className="w-4 h-4 mr-2" /> Commander maintenant
