@@ -1,9 +1,21 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { ArrowRight, Sparkles, ShieldCheck, Ship, Search, Package, CreditCard, Truck, Star, TrendingUp } from "lucide-react";
+import {
+  ArrowRight,
+  ShoppingBag,
+  Truck,
+  ShieldCheck,
+  MapPin,
+  RotateCcw,
+  Sparkles,
+  Package,
+  X,
+  Check,
+  Star,
+} from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { ProductCard, type ProductCardData } from "@/components/product-card";
+import { formatXOF } from "@/lib/format";
 
 export const Route = createFileRoute("/")({
   component: HomePage,
@@ -13,299 +25,546 @@ function HomePage() {
   return (
     <>
       <Hero />
-      <StatsBar />
-      <Categories />
-      <FeaturedProducts />
-      <HowItWorks />
-      <SourcingBanner />
+      <Features />
+      <WhyKiosk />
+      <ThreeSteps />
       <Testimonials />
+      <FinalCTA />
     </>
   );
 }
 
-/* ============ HERO ============ */
+/* ============================================================
+   HERO — Eazyy-inspired: big serif-italic headline + mockup
+   ============================================================ */
 function Hero() {
   return (
-    <section className="relative overflow-hidden bg-background pt-16 md:pt-24 pb-20 md:pb-28">
+    <section className="relative overflow-hidden bg-surface/50 pt-16 md:pt-20 pb-24 md:pb-32">
+      {/* subtle grid backdrop */}
       <div
-        className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[700px] rounded-full blur-3xl opacity-40 pointer-events-none"
-        style={{ background: "radial-gradient(circle, oklch(0.82 0.14 75 / 0.35), oklch(0.22 0.10 275 / 0.25) 55%, transparent 75%)" }}
+        aria-hidden
+        className="absolute inset-0 pointer-events-none opacity-[0.35]"
+        style={{
+          backgroundImage:
+            "linear-gradient(to right, oklch(0 0 0 / 0.04) 1px, transparent 1px), linear-gradient(to bottom, oklch(0 0 0 / 0.04) 1px, transparent 1px)",
+          backgroundSize: "56px 56px",
+          maskImage: "radial-gradient(ellipse at center, black 45%, transparent 75%)",
+        }}
+      />
+      <div
+        aria-hidden
+        className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[900px] h-[900px] rounded-full blur-3xl opacity-30 pointer-events-none"
+        style={{
+          background:
+            "radial-gradient(circle, oklch(0.82 0.14 75 / 0.35), oklch(0.22 0.10 275 / 0.15) 55%, transparent 75%)",
+        }}
       />
 
-      <div className="container-kiosk relative text-center max-w-5xl mx-auto kiosk-fade-up">
-        <span
-          className="inline-flex items-center pl-5 pr-4 py-1.5 text-accent text-[11px] font-semibold uppercase tracking-wider"
-          style={{
-            clipPath: "polygon(0 50%, 8% 0, 100% 0, 100% 100%, 8% 100%)",
-            background: "oklch(0.82 0.14 75 / 0.15)",
-          }}
-        >
+      <div className="container-kiosk relative max-w-4xl mx-auto text-center kiosk-fade-up">
+        <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-card border border-border shadow-soft text-[11px] font-semibold uppercase tracking-wider text-primary">
+          <Star className="w-3 h-3 fill-accent text-accent" />
           Précommandes ouvertes — Chine & Dubaï
         </span>
 
-        <h1 className="mt-6 font-display font-bold tracking-tight text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-[1.05] text-balance-fix">
-          Précommandez.
-          <br />
-          Recevez, <span className="italic font-medium text-accent">sans stress.</span>
+        <h1 className="mt-6 font-display font-bold tracking-tight leading-[1.02] text-balance-fix text-[2.5rem] sm:text-6xl md:text-7xl lg:text-[5.5rem] text-primary">
+          Commandez depuis la{" "}
+          <span
+            className="italic font-normal text-primary/90"
+            style={{ fontFamily: "var(--font-serif)" }}
+          >
+            Chine
+          </span>{" "}
+          et{" "}
+          <span
+            className="italic font-normal text-primary/90"
+            style={{ fontFamily: "var(--font-serif)" }}
+          >
+            Dubaï
+          </span>
+          . Recevez en{" "}
+          <span
+            className="italic font-normal text-primary/90"
+            style={{ fontFamily: "var(--font-serif)" }}
+          >
+            un rien de temps
+          </span>{" "}
+          chez vous
+          <span className="text-accent">.</span>
         </h1>
 
-        <p className="mt-6 text-base md:text-lg text-muted-foreground max-w-xl mx-auto leading-relaxed">
-          Précommandez vos produits préférés directement depuis Guangzhou et Dubaï. Nous les sourçons, les importons et les livrons à votre porte à Dakar.
+        <p className="mt-7 text-base md:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+          Précommandez vos produits préférés, réglez par Wave, Orange Money ou Free Money.
+          Kiosk source, importe et livre à votre porte — de Guangzhou et Dubaï jusqu'à Dakar.
         </p>
 
-        <div className="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
-          <Button asChild size="lg" variant="default" className="rounded-full h-13 px-7 text-base bg-primary text-primary-foreground hover:bg-primary-light btn-glow">
+        <div className="mt-9 flex flex-col sm:flex-row gap-3 justify-center">
+          <Button
+            asChild
+            size="lg"
+            className="rounded-full h-13 px-7 text-base bg-primary text-primary-foreground hover:bg-primary-light btn-glow"
+          >
             <Link to="/catalogue">
-              Explorer le catalogue <ArrowRight className="w-4 h-4 ml-1" />
+              Découvrir le catalogue <ArrowRight className="w-4 h-4 ml-1" />
             </Link>
           </Button>
-          <Button asChild size="lg" variant="outline" className="rounded-full h-13 px-7 text-base border-2 bg-transparent">
-            <Link to="/demander-un-produit">Demander un produit</Link>
+          <Button
+            asChild
+            size="lg"
+            variant="outline"
+            className="rounded-full h-13 px-7 text-base border-2 border-primary bg-primary text-primary-foreground hover:bg-primary-light"
+          >
+            <Link to="/compte/commandes">
+              <Package className="w-4 h-4 mr-1" /> Mes commandes
+            </Link>
           </Button>
         </div>
 
-        <HeroPhoneMockup />
+        {/* social proof row */}
+        <div className="mt-8 flex items-center justify-center gap-3">
+          <div className="flex -space-x-2">
+            {["#FFBC56", "#11114B", "#78BFA5", "#E56A54", "#8A6DE1"].map((c) => (
+              <div
+                key={c}
+                className="w-8 h-8 rounded-full border-2 border-background"
+                style={{ background: c }}
+              />
+            ))}
+          </div>
+          <div className="flex items-center gap-1 text-accent">
+            {Array.from({ length: 5 }).map((_, i) => (
+              <Star key={i} className="w-3.5 h-3.5 fill-current" />
+            ))}
+            <span className="ml-2 text-sm text-muted-foreground">+100 clients satisfaits</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Big browser mockup */}
+      <div className="container-kiosk relative mt-16 md:mt-20 max-w-5xl mx-auto">
+        <BrowserMockup />
       </div>
     </section>
   );
 }
 
-function HeroPhoneMockup() {
+/* ---------- Browser mockup with real featured products ---------- */
+function BrowserMockup() {
+  const { data } = useQuery({
+    queryKey: ["home-hero-featured"],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("products")
+        .select(
+          "id, slug, name, price_xof, compare_at_price_xof, product_images(url, sort_order)",
+        )
+        .eq("status", "published")
+        .eq("is_featured", true)
+        .order("created_at", { ascending: false })
+        .limit(4);
+      return (data ?? []).map((p) => ({
+        ...p,
+        image_url: p.product_images?.[0]?.url ?? null,
+      }));
+    },
+  });
+
+  const products = data ?? [];
+
   return (
-    <div className="relative mt-16 md:mt-20 max-w-md mx-auto">
-      <div
-        className="relative mx-auto w-64 rounded-[2.5rem] bg-sidebar border-[6px] border-primary shadow-2xl overflow-hidden kiosk-fade-up"
-        style={{ animationDelay: "0.15s" }}
-      >
-        <div className="p-5 pt-8">
-          <div className="text-xs font-semibold text-sidebar-foreground/60 uppercase tracking-widest">Kiosk</div>
-          <div className="mt-1 text-sm font-semibold text-sidebar-foreground">Suivi de commande</div>
-          <div className="mt-6 h-2 rounded-full bg-sidebar-foreground/15 overflow-hidden">
-            <div className="h-full rounded-full bg-accent" style={{ width: "65%" }} />
+    <div
+      className="relative rounded-[1.75rem] bg-card shadow-elevated border border-border overflow-hidden kiosk-fade-up"
+      style={{ animationDelay: "0.15s" }}
+    >
+      {/* browser chrome */}
+      <div className="flex items-center gap-2 px-5 py-3 border-b border-border bg-surface">
+        <span className="w-3 h-3 rounded-full bg-destructive/70" />
+        <span className="w-3 h-3 rounded-full bg-accent" />
+        <span className="w-3 h-3 rounded-full bg-success/70" />
+        <div className="ml-4 flex-1 max-w-md">
+          <div className="rounded-full bg-card border border-border px-4 py-1.5 text-xs text-muted-foreground text-center truncate">
+            kiosk.sn / catalogue
           </div>
-          <div className="mt-3 text-xs text-sidebar-foreground/70">En transit — Chine → Dakar</div>
         </div>
       </div>
 
-      <div
-        className="hidden md:flex absolute -left-16 top-4 glass-panel rounded-2xl p-4 max-w-[200px] items-start gap-3 kiosk-fade-up"
-        style={{ animationDelay: "0.3s" }}
-      >
-        <div className="w-9 h-9 rounded-full bg-success/15 text-success flex items-center justify-center flex-shrink-0">
-          <ShieldCheck className="w-4.5 h-4.5" />
+      {/* fake site navbar */}
+      <div className="hidden md:flex items-center justify-between px-6 py-3 border-b border-border/60">
+        <div className="flex items-center gap-6 text-xs font-medium text-muted-foreground">
+          <span className="text-primary font-semibold">Kiosk</span>
+          <span>Catalogue</span>
+          <span>Sourcing</span>
+          <span>Comment ça marche</span>
         </div>
-        <div>
-          <div className="text-xs font-semibold">Paiement confirmé</div>
-          <div className="text-[11px] text-muted-foreground mt-0.5">Wave · 45 000 FCFA</div>
+        <div className="flex items-center gap-3">
+          <span className="text-[11px] px-2.5 py-1 rounded-full bg-accent/15 text-primary font-semibold">
+            FCFA
+          </span>
+          <span className="w-7 h-7 rounded-full bg-primary text-primary-foreground text-xs flex items-center justify-center font-bold">
+            K
+          </span>
         </div>
       </div>
 
-      <div
-        className="hidden md:block absolute -right-16 top-1/3 glass-panel rounded-2xl p-4 max-w-[180px] kiosk-fade-up"
-        style={{ animationDelay: "0.45s" }}
-      >
-        <div className="flex gap-0.5 text-accent">
-          {Array.from({ length: 5 }).map((_, i) => (
-            <Star key={i} className="w-3.5 h-3.5 fill-current" />
-          ))}
-        </div>
-        <div className="text-xs font-semibold mt-1">4.9 · 2 400+ avis</div>
+      {/* product grid inside mockup */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 p-4 md:p-6 bg-background">
+        {products.length === 0
+          ? Array.from({ length: 4 }).map((_, i) => (
+              <div key={i} className="aspect-[3/4] rounded-2xl kiosk-skeleton" />
+            ))
+          : products.map((p) => (
+              <Link
+                key={p.id}
+                to="/produit/$slug"
+                params={{ slug: p.slug }}
+                className="group rounded-2xl bg-card border border-border/60 overflow-hidden hover:shadow-elevated hover:-translate-y-0.5 transition-all"
+              >
+                <div className="aspect-square bg-surface overflow-hidden">
+                  {p.image_url ? (
+                    <img
+                      src={p.image_url}
+                      alt={p.name}
+                      loading="lazy"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-muted-foreground">
+                      <Package className="w-8 h-8" />
+                    </div>
+                  )}
+                </div>
+                <div className="p-3">
+                  <div className="text-[13px] font-semibold line-clamp-1">{p.name}</div>
+                  <div className="mt-1.5 flex items-center gap-2">
+                    <span className="text-xs font-bold text-primary tabular-nums whitespace-nowrap">
+                      {formatXOF(p.price_xof)}
+                    </span>
+                    {p.compare_at_price_xof && p.compare_at_price_xof > p.price_xof && (
+                      <span className="text-[10px] text-muted-foreground line-through tabular-nums">
+                        {formatXOF(p.compare_at_price_xof)}
+                      </span>
+                    )}
+                  </div>
+                </div>
+              </Link>
+            ))}
       </div>
 
-      <div
-        className="hidden md:flex absolute -right-10 bottom-0 glass-panel rounded-2xl p-4 max-w-[190px] items-start gap-3 kiosk-fade-up"
-        style={{ animationDelay: "0.6s" }}
-      >
-        <div className="w-9 h-9 rounded-full bg-accent/20 text-primary flex items-center justify-center flex-shrink-0">
-          <TrendingUp className="w-4.5 h-4.5" />
-        </div>
-        <div>
-          <div className="text-xs font-semibold">98% à l'heure</div>
-          <div className="text-[11px] text-muted-foreground mt-0.5">Livraisons Kiosk</div>
-        </div>
+      {/* floating chat pill */}
+      <div className="absolute bottom-4 right-4 w-11 h-11 rounded-full bg-primary text-primary-foreground shadow-elevated flex items-center justify-center">
+        <ShoppingBag className="w-4.5 h-4.5" />
       </div>
     </div>
   );
 }
 
-/* ============ STATS BAR ============ */
-const STATS = [
-  { value: "12 000+", label: "Clients satisfaits" },
-  { value: "2", label: "Pays sourcés" },
-  { value: "98%", label: "Livraisons à l'heure" },
-  { value: "100%", label: "Paiement sécurisé" },
-];
-
-function StatsBar() {
-  return (
-    <section className="container-kiosk -mt-8 md:-mt-12 relative z-10">
-      <div className="rounded-3xl border border-border shadow-elevated grid grid-cols-2 md:grid-cols-4 gap-px bg-border overflow-hidden">
-        {STATS.map((s) => (
-          <div key={s.label} className="bg-card p-6 text-center">
-            <div className="font-display font-bold text-2xl md:text-3xl text-primary">{s.value}</div>
-            <div className="mt-1 text-xs text-muted-foreground">{s.label}</div>
-          </div>
-        ))}
-      </div>
-    </section>
-  );
-}
-
-/* ============ CATEGORIES ============ */
-function Categories() {
-  const { data } = useQuery({
-    queryKey: ["home-categories"],
-    queryFn: async () => {
-      const { data } = await supabase
-        .from("categories")
-        .select("id, slug, name, icon")
-        .eq("is_active", true)
-        .order("sort_order");
-      return data ?? [];
+/* ============================================================
+   FEATURES — "Tout est pensé pour vous" — 2×2 card grid
+   ============================================================ */
+function Features() {
+  const items = [
+    {
+      icon: ShoppingBag,
+      tags: ["Chine & Dubaï", "Sourcing"],
+      title: "Catalogue international",
+      desc: "Choisissez parmi des centaines de produits importés directement de Chine et de Dubaï, sans passer par un revendeur.",
     },
-  });
+    {
+      icon: Truck,
+      tags: ["Suivi", "Notifications temps réel"],
+      title: "Suivi de colis transparent",
+      desc: "Chaque commande est suivie en temps réel. Vous voyez chaque étape : sourcing, embarquement, transit, livraison.",
+    },
+    {
+      icon: ShieldCheck,
+      tags: ["Mobile Money", "Wave · OM · Free"],
+      title: "Paiement local & sécurisé",
+      desc: "Payez en FCFA depuis votre compte Wave, Orange Money ou Free Money. Aucune carte bancaire à saisir.",
+    },
+    {
+      icon: MapPin,
+      tags: ["Dakar & régions", "Porte à porte"],
+      title: "Livraison fiable chez vous",
+      desc: "À l'arrivée du colis à Dakar, notre livreur vous appelle et dépose la commande à votre adresse.",
+    },
+  ];
+
+  const pills = [
+    { icon: RotateCcw, label: "Réponse rapide", sub: "Devis sourcing sous 24h ouvrées" },
+    { icon: Sparkles, label: "Achats sur mesure", sub: "Vous décrivez, nous trouvons pour vous" },
+    { icon: Truck, label: "Frais transparents", sub: "Transit affiché avant précommande" },
+  ];
 
   return (
-    <section className="container-kiosk py-16 md:py-24">
-      <div className="flex items-end justify-between mb-8">
-        <div>
-          <span className="text-xs uppercase tracking-widest text-muted-foreground">Explorer</span>
-          <h2 className="mt-2 text-3xl md:text-4xl font-display font-bold">Toutes les catégories</h2>
+    <section className="bg-background py-24 md:py-32">
+      <div className="container-kiosk">
+        <div className="text-center max-w-2xl mx-auto mb-14">
+          <span className="text-[11px] uppercase tracking-[0.25em] text-muted-foreground font-semibold">
+            Plateforme
+          </span>
+          <h2 className="mt-4 font-display font-bold tracking-tight text-3xl md:text-4xl lg:text-5xl text-primary leading-[1.05]">
+            Tout est{" "}
+            <span className="italic font-normal" style={{ fontFamily: "var(--font-serif)" }}>
+              pensé
+            </span>{" "}
+            pour vous
+            <span className="text-accent">.</span>
+          </h2>
+          <p className="mt-4 text-muted-foreground">
+            Une plateforme complète qui centralise tout ce dont vous avez besoin pour importer en
+            toute sérénité.
+          </p>
         </div>
-        <Link to="/catalogue" className="hidden sm:inline-flex items-center gap-1 text-sm font-medium hover:text-primary group">
-          Tout voir <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-        </Link>
-      </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-4">
-        {(data ?? []).map((cat) => (
-          <Link
-            key={cat.id}
-            to="/catalogue"
-            search={{ categorie: cat.slug }}
-            className="group relative aspect-square rounded-3xl bg-card border border-border/60 p-4 md:p-5 flex flex-col justify-between overflow-hidden hover:border-transparent hover:shadow-elevated hover:-translate-y-1 transition-all"
-          >
-            <div className="absolute inset-0 bg-gradient-to-br from-accent/0 via-accent/0 to-accent/20 opacity-0 group-hover:opacity-100 transition-opacity" />
-            <div className="relative w-10 h-10 rounded-2xl bg-accent/15 text-primary flex items-center justify-center">
-              <Package className="w-5 h-5" />
-            </div>
-            <div className="relative">
-              <div className="text-sm md:text-base font-semibold">{cat.name}</div>
-              <div className="mt-1 text-xs text-muted-foreground opacity-0 group-hover:opacity-100 -translate-y-1 group-hover:translate-y-0 transition-all">
-                Découvrir →
+        <div className="grid md:grid-cols-2 gap-5 md:gap-6 max-w-5xl mx-auto">
+          {items.map((it) => (
+            <article
+              key={it.title}
+              className="rounded-3xl bg-card border border-border/70 p-7 md:p-8 hover:shadow-elevated hover:-translate-y-1 transition-all"
+            >
+              <div className="flex items-start gap-4">
+                <div className="w-11 h-11 rounded-2xl bg-accent/15 text-primary flex items-center justify-center shrink-0">
+                  <it.icon className="w-5 h-5" />
+                </div>
+                <div className="flex flex-wrap gap-1.5 pt-1.5">
+                  {it.tags.map((t) => (
+                    <span
+                      key={t}
+                      className="px-2.5 py-0.5 rounded-full bg-surface text-[10px] font-semibold uppercase tracking-wider text-muted-foreground border border-border/70"
+                    >
+                      {t}
+                    </span>
+                  ))}
+                </div>
+              </div>
+              <h3 className="mt-5 font-display font-bold text-xl md:text-2xl text-primary">
+                {it.title}
+              </h3>
+              <p className="mt-2 text-sm md:text-base text-muted-foreground leading-relaxed">
+                {it.desc}
+              </p>
+            </article>
+          ))}
+        </div>
+
+        <div className="mt-10 flex flex-wrap justify-center gap-3">
+          {pills.map((p) => (
+            <div
+              key={p.label}
+              className="inline-flex items-center gap-3 pl-2 pr-5 py-2 rounded-full bg-card border border-border/70 shadow-soft"
+            >
+              <span className="w-8 h-8 rounded-full bg-accent/15 text-primary flex items-center justify-center">
+                <p.icon className="w-3.5 h-3.5" />
+              </span>
+              <div className="text-left leading-tight">
+                <div className="text-[13px] font-semibold text-primary">{p.label}</div>
+                <div className="text-[10.5px] text-muted-foreground">{p.sub}</div>
               </div>
             </div>
-          </Link>
-        ))}
+          ))}
+        </div>
       </div>
     </section>
   );
 }
 
-/* ============ FEATURED ============ */
-function FeaturedProducts() {
-  const { data, isLoading } = useQuery({
-    queryKey: ["home-featured"],
-    queryFn: async () => {
-      const { data } = await supabase
-        .from("products")
-        .select("id, slug, name, short_description, price_xof, compare_at_price_xof, origin_country, estimated_delivery_days_min, estimated_delivery_days_max, rating_avg, rating_count, product_images(url, sort_order)")
-        .eq("status", "published")
-        .eq("is_featured", true)
-        .order("created_at", { ascending: false })
-        .limit(8);
-      return (data ?? []).map((p) => ({
-        ...p,
-        image_url: p.product_images?.[0]?.url ?? null,
-      })) as unknown as ProductCardData[];
-    },
-  });
+/* ============================================================
+   WHY KIOSK — problem / solution split
+   ============================================================ */
+function WhyKiosk() {
+  const problems = [
+    "Frais de transport opaques et souvent facturés au dernier moment",
+    "Délais imprévisibles, aucun suivi de bout en bout",
+    "Aucun recours si le produit ne correspond pas",
+    "Aucune carte bancaire internationale acceptée au Sénégal",
+  ];
+  const solutions = [
+    { title: "Prix transport affiché avant paiement", desc: "Vous voyez le coût de transit avant même de valider votre précommande." },
+    { title: "Délai selon le mode choisi", desc: "Aérien (10–30 j) ou maritime (45–60 j) : le délai est annoncé au moment de la commande." },
+    { title: "Suivi en temps réel", desc: "Vous suivez chaque étape de votre commande, du fournisseur jusqu'à votre porte." },
+    { title: "Paiement Mobile Money instantané", desc: "Wave, Orange Money, Free Money : vous payez en FCFA, aucune carte requise." },
+  ];
 
   return (
-    <section className="bg-surface/60 py-16 md:py-24 border-y border-border/60">
+    <section className="bg-surface/40 py-24 md:py-32 border-y border-border/40">
       <div className="container-kiosk">
-        <div className="flex items-end justify-between mb-8">
-          <div>
-            <span className="text-xs uppercase tracking-widest text-muted-foreground">Sélection Kiosk</span>
-            <h2 className="mt-2 text-3xl md:text-4xl font-display font-bold">Produits en vedette</h2>
-          </div>
-          <Link to="/catalogue" className="hidden sm:inline-flex items-center gap-1 text-sm font-medium hover:text-primary group">
-            Tout voir <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-          </Link>
+        <div className="text-center max-w-2xl mx-auto mb-12">
+          <h2 className="font-display font-bold tracking-tight text-3xl md:text-4xl lg:text-5xl text-primary leading-[1.05]">
+            Pourquoi choisir{" "}
+            <span className="italic font-normal" style={{ fontFamily: "var(--font-serif)" }}>
+              Kiosk
+            </span>
+            <span className="text-accent"> ?</span>
+          </h2>
+          <p className="mt-4 text-muted-foreground">
+            Les plateformes internationales n'ont pas été conçues pour l'Afrique. Nous, oui.
+          </p>
         </div>
 
-        {isLoading ? (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-            {Array.from({ length: 8 }).map((_, i) => (
-              <div key={i} className="aspect-[3/4] rounded-3xl kiosk-skeleton" />
-            ))}
+        <div className="grid md:grid-cols-2 gap-5 md:gap-6 max-w-5xl mx-auto">
+          {/* Problem card */}
+          <div className="rounded-3xl bg-card border border-border/70 p-7 md:p-8">
+            <h3 className="font-display font-bold text-xl md:text-2xl text-primary">
+              Le{" "}
+              <span className="italic font-normal" style={{ fontFamily: "var(--font-serif)" }}>
+                problème
+              </span>
+            </h3>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Ce que les autres solutions vous imposent :
+            </p>
+            <ul className="mt-5 space-y-3">
+              {problems.map((p) => (
+                <li key={p} className="flex items-start gap-3">
+                  <span className="mt-0.5 w-5 h-5 rounded-full bg-destructive/15 text-destructive flex items-center justify-center shrink-0">
+                    <X className="w-3 h-3" strokeWidth={3} />
+                  </span>
+                  <span className="text-sm text-foreground/80 leading-relaxed">{p}</span>
+                </li>
+              ))}
+            </ul>
           </div>
-        ) : (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-            {(data ?? []).map((p, i) => (
-              <ProductCard key={p.id} product={p} badge={i === 0 ? "Top vente" : undefined} />
-            ))}
+
+          {/* Solution card */}
+          <div className="rounded-3xl bg-card border border-border/70 p-7 md:p-8 shadow-soft">
+            <h3 className="font-display font-bold text-xl md:text-2xl text-primary">
+              La solution{" "}
+              <span className="italic font-normal" style={{ fontFamily: "var(--font-serif)" }}>
+                Kiosk
+              </span>
+            </h3>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Nous avons construit chaque étape autour de vous :
+            </p>
+            <ul className="mt-5 space-y-4">
+              {solutions.map((s) => (
+                <li key={s.title} className="flex items-start gap-3">
+                  <span className="mt-0.5 w-5 h-5 rounded-full bg-success/15 text-success flex items-center justify-center shrink-0">
+                    <Check className="w-3 h-3" strokeWidth={3} />
+                  </span>
+                  <div>
+                    <div className="text-sm font-semibold text-primary">{s.title}</div>
+                    <div className="text-sm text-muted-foreground leading-relaxed">{s.desc}</div>
+                  </div>
+                </li>
+              ))}
+            </ul>
           </div>
-        )}
+        </div>
       </div>
     </section>
   );
 }
 
-/* ============ HOW IT WORKS ============ */
-function HowItWorks() {
+/* ============================================================
+   THREE STEPS — dark vertical timeline (Waly-inspired)
+   ============================================================ */
+function ThreeSteps() {
   const steps = [
-    { icon: Search, title: "Trouvez ou demandez", desc: "Parcourez le catalogue ou faites une demande de sourcing sur mesure." },
-    { icon: CreditCard, title: "Précommandez", desc: "Payez le prix du produit via Wave, Orange Money ou Free Money." },
-    { icon: Ship, title: "Import et transit", desc: "Nous importons depuis la Chine ou Dubaï en 10 à 60 jours selon le mode." },
-    { icon: Truck, title: "Livraison à votre porte", desc: "Frais de transit et livraison réglés à l'arrivée du colis." },
+    {
+      n: "01",
+      eyebrow: "1ère étape",
+      title: "Parcourez le catalogue",
+      desc: "Produits Chine & Dubaï, prix transparent et délai affiché avant précommande. Choisissez ce qui vous plaît, ajoutez au panier.",
+    },
+    {
+      n: "02",
+      eyebrow: "2ème étape",
+      title: "Payez par Mobile Money",
+      desc: "Wave, Orange Money ou Free Money. Vous réglez le prix produit maintenant, les frais de transit à l'arrivée du colis.",
+    },
+    {
+      n: "03",
+      eyebrow: "3ème étape",
+      title: "Recevez chez vous",
+      desc: "Suivi temps réel jusqu'à votre porte. Notre livreur vous appelle dès que le colis est prêt à être remis.",
+    },
   ];
-  return (
-    <section className="container-kiosk py-16 md:py-24">
-      <div className="text-center max-w-2xl mx-auto mb-12">
-        <span className="text-xs uppercase tracking-widest text-muted-foreground">Comment ça marche</span>
-        <h2 className="mt-2 text-3xl md:text-4xl font-display font-bold">Quatre étapes, aucun tracas</h2>
-        <p className="mt-4 text-muted-foreground">
-          De la découverte à la livraison, nous nous occupons de tout. Vous payez uniquement à la commande, puis les frais de transit à l'arrivée.
-        </p>
-      </div>
-      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-        {steps.map((s, i) => (
-          <div key={s.title} className="relative rounded-3xl bg-card border border-border/60 p-6 hover:shadow-elevated hover:-translate-y-1 transition-all">
-            <div className="absolute -top-3 -right-3 w-10 h-10 rounded-full bg-primary text-primary-foreground font-display font-bold flex items-center justify-center">
-              {i + 1}
-            </div>
-            <div className="w-12 h-12 rounded-2xl bg-accent/15 text-primary flex items-center justify-center mb-4">
-              <s.icon className="w-5 h-5" />
-            </div>
-            <h3 className="text-lg font-display font-semibold">{s.title}</h3>
-            <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{s.desc}</p>
-          </div>
-        ))}
-      </div>
-    </section>
-  );
-}
 
-/* ============ SOURCING BANNER ============ */
-function SourcingBanner() {
   return (
-    <section className="container-kiosk py-8">
-      <div className="relative overflow-hidden rounded-[2rem] p-8 md:p-14 text-sidebar-foreground" style={{ background: "var(--gradient-hero)" }}>
-        <div className="absolute -right-10 -top-10 w-64 h-64 rounded-full bg-accent/20 blur-3xl" />
-        <div className="relative max-w-2xl">
-          <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent/20 border border-accent/30 text-accent text-[11px] font-semibold uppercase tracking-wider">
-            <Sparkles className="w-3 h-3" /> Sourcing à la demande
+    <section
+      className="relative py-24 md:py-32 overflow-hidden"
+      style={{
+        background:
+          "radial-gradient(1000px 500px at 20% 10%, oklch(0.28 0.12 275) 0%, transparent 60%), radial-gradient(700px 400px at 90% 90%, oklch(0.75 0.15 75 / 0.15) 0%, transparent 55%), linear-gradient(180deg, oklch(0.10 0.05 275) 0%, oklch(0.06 0.03 275) 100%)",
+      }}
+    >
+      {/* soft grain */}
+      <div
+        aria-hidden
+        className="absolute inset-0 opacity-[0.04] pointer-events-none mix-blend-overlay"
+        style={{
+          backgroundImage:
+            "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>\")",
+        }}
+      />
+
+      <div className="container-kiosk relative">
+        <div className="text-center max-w-2xl mx-auto mb-16">
+          <span className="inline-block px-3 py-1 rounded-full bg-white/10 border border-white/15 text-[11px] uppercase tracking-[0.25em] text-white/80 font-semibold">
+            Comment ça marche
           </span>
-          <h2 className="mt-5 text-3xl md:text-4xl lg:text-5xl font-display font-bold leading-tight">
-            Un produit introuvable ?<br />
-            <span className="text-accent">Nous le trouvons pour vous.</span>
+          <h2 className="mt-6 font-display font-bold tracking-tight text-4xl md:text-5xl lg:text-6xl text-white leading-[1.05]">
+            3 étapes,{" "}
+            <span
+              className="italic font-normal text-white/85"
+              style={{ fontFamily: "var(--font-serif)" }}
+            >
+              c'est tout
+            </span>
+            <span className="text-accent">.</span>
           </h2>
-          <p className="mt-4 text-sidebar-foreground/75 max-w-lg">
-            Décrivez ce que vous cherchez. Notre équipe le source directement chez nos fournisseurs à Guangzhou ou Dubaï et vous propose un devis sous 24h.
+          <p className="mt-4 text-white/60">
+            Précommande à l'international, sans stress. Vous choisissez, vous précommandez, nous
+            importons, vous recevez.
           </p>
-          <Button asChild size="lg" className="mt-8 rounded-full h-13 px-7 bg-accent text-accent-foreground hover:bg-accent-hover btn-glow">
-            <Link to="/demander-un-produit">Faire une demande <ArrowRight className="w-4 h-4 ml-1" /></Link>
+        </div>
+
+        {/* Timeline */}
+        <div className="max-w-4xl mx-auto space-y-10 md:space-y-14">
+          {steps.map((s, i) => (
+            <div
+              key={s.n}
+              className="relative grid grid-cols-[auto_1fr] gap-6 md:gap-10 items-start kiosk-fade-up"
+              style={{ animationDelay: `${0.05 + i * 0.1}s` }}
+            >
+              {/* Number column with vertical line */}
+              <div className="relative flex flex-col items-center">
+                <div
+                  className="font-display font-bold text-6xl md:text-8xl leading-none text-white/25 tabular-nums"
+                  aria-hidden
+                >
+                  {s.n}
+                </div>
+                {i < steps.length - 1 && (
+                  <div className="mt-4 w-px flex-1 min-h-[80px] md:min-h-[120px] bg-gradient-to-b from-white/25 via-white/10 to-transparent" />
+                )}
+              </div>
+
+              {/* Card */}
+              <div className="rounded-2xl md:rounded-3xl bg-white/[0.04] border border-white/10 backdrop-blur-sm p-6 md:p-8">
+                <span className="inline-flex items-center px-3 py-1 rounded-full bg-white/[0.08] border border-white/10 text-[11px] text-white/70 font-medium">
+                  {s.eyebrow}
+                </span>
+                <h3 className="mt-4 font-display font-bold text-xl md:text-2xl lg:text-3xl text-white">
+                  {s.title}
+                </h3>
+                <p className="mt-3 text-sm md:text-base text-white/60 leading-relaxed max-w-lg">
+                  {s.desc}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-14 text-center">
+          <Button
+            asChild
+            size="lg"
+            className="rounded-full h-13 px-7 bg-accent text-accent-foreground hover:bg-accent-hover btn-glow"
+          >
+            <Link to="/catalogue">
+              Commencer maintenant <ArrowRight className="w-4 h-4 ml-1" />
+            </Link>
           </Button>
         </div>
       </div>
@@ -313,34 +572,122 @@ function SourcingBanner() {
   );
 }
 
-/* ============ TESTIMONIALS ============ */
+/* ============================================================
+   TESTIMONIALS — Ils nous font confiance
+   ============================================================ */
 function Testimonials() {
   const reviews = [
-    { name: "Aminata D.", city: "Dakar", quote: "J'ai précommandé un casque de Chine. Livré en 15 jours par avion, exactement comme promis. Service impeccable.", rating: 5 },
-    { name: "Ibrahima S.", city: "Thiès", quote: "Le sourcing sur mesure est génial. J'ai reçu un devis en moins de 24h pour un article introuvable au Sénégal.", rating: 5 },
-    { name: "Fatou N.", city: "Saint-Louis", quote: "Le paiement en deux fois m'a permis de commander une montre premium sans me priver. Merci Kiosk !", rating: 5 },
+    {
+      name: "Aminata D.",
+      city: "Dakar",
+      quote:
+        "Précommande envoyée le matin, livrée en 15 jours par avion. Le suivi était clair, exactement comme promis.",
+    },
+    {
+      name: "Kora A.",
+      city: "Thiès",
+      quote:
+        "Le paiement Mobile Money a tout changé. Plus besoin de carte bancaire pour importer, c'est aussi simple qu'un achat local.",
+    },
+    {
+      name: "Jean-Marc I.",
+      city: "Saly",
+      quote:
+        "J'ai demandé un produit impossible à trouver au Sénégal. Devis en 24h, précommandé, reçu 3 semaines plus tard. Bluffant.",
+    },
   ];
+
   return (
-    <section className="container-kiosk py-16 md:py-24">
-      <div className="text-center max-w-2xl mx-auto mb-12">
-        <span className="text-xs uppercase tracking-widest text-muted-foreground">Ils nous font confiance</span>
-        <h2 className="mt-2 text-3xl md:text-4xl font-display font-bold">Ce que nos clients disent</h2>
+    <section className="bg-background py-24 md:py-32">
+      <div className="container-kiosk">
+        <div className="text-center max-w-2xl mx-auto mb-14">
+          <span className="text-[11px] uppercase tracking-[0.25em] text-muted-foreground font-semibold">
+            Témoignages
+          </span>
+          <h2 className="mt-4 font-display font-bold tracking-tight text-3xl md:text-4xl lg:text-5xl text-primary leading-[1.05]">
+            Ils nous font{" "}
+            <span className="italic font-normal" style={{ fontFamily: "var(--font-serif)" }}>
+              confiance
+            </span>
+            <span className="text-accent">.</span>
+          </h2>
+        </div>
+
+        <div className="grid md:grid-cols-3 gap-5 md:gap-6 max-w-5xl mx-auto">
+          {reviews.map((r) => (
+            <div
+              key={r.name}
+              className="rounded-3xl bg-card border border-border/70 p-6 md:p-7 hover:shadow-elevated hover:-translate-y-1 transition-all"
+            >
+              <div className="flex gap-0.5 text-accent">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <Star key={i} className="w-4 h-4 fill-current" />
+                ))}
+              </div>
+              <p className="mt-4 text-foreground leading-relaxed">"{r.quote}"</p>
+              <div className="mt-5 pt-5 border-t border-border/70">
+                <div className="text-sm font-semibold text-primary">{r.name}</div>
+                <div className="text-xs text-muted-foreground">{r.city}</div>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
-      <div className="grid md:grid-cols-3 gap-4 md:gap-6">
-        {reviews.map((r) => (
-          <div key={r.name} className="rounded-3xl bg-card border border-border/60 p-6 md:p-7 hover:shadow-elevated hover:-translate-y-1 transition-all">
-            <div className="flex gap-0.5 text-accent">
-              {Array.from({ length: r.rating }).map((_, i) => (
-                <svg key={i} className="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M10 1l2.6 6h6.4l-5.2 4 2 6.5L10 13.7 4.2 17.5l2-6.5L1 7h6.4z" /></svg>
-              ))}
-            </div>
-            <p className="mt-4 text-foreground leading-relaxed">"{r.quote}"</p>
-            <div className="mt-5 pt-5 border-t border-border">
-              <div className="text-sm font-semibold">{r.name}</div>
-              <div className="text-xs text-muted-foreground">{r.city}</div>
-            </div>
+    </section>
+  );
+}
+
+/* ============================================================
+   FINAL CTA — Eazyy-style dark card
+   ============================================================ */
+function FinalCTA() {
+  return (
+    <section className="container-kiosk pb-20 md:pb-28">
+      <div
+        className="relative overflow-hidden rounded-[2rem] md:rounded-[2.5rem] p-10 md:p-16 text-center text-primary-foreground"
+        style={{ background: "var(--gradient-hero)" }}
+      >
+        <div
+          aria-hidden
+          className="absolute -right-16 -top-16 w-72 h-72 rounded-full bg-accent/25 blur-3xl"
+        />
+        <div
+          aria-hidden
+          className="absolute -left-16 -bottom-16 w-72 h-72 rounded-full bg-accent/15 blur-3xl"
+        />
+        <div className="relative max-w-2xl mx-auto">
+          <Sparkles className="w-6 h-6 mx-auto text-accent" aria-hidden />
+          <h2 className="mt-5 font-display font-bold text-3xl md:text-4xl lg:text-5xl leading-[1.05]">
+            Votre prochaine commande commence{" "}
+            <span className="italic font-normal" style={{ fontFamily: "var(--font-serif)" }}>
+              ici
+            </span>
+            <span className="text-accent">.</span>
+          </h2>
+          <p className="mt-5 text-primary-foreground/75">
+            Rejoignez +100 sénégalais qui commandent ce qu'ils veulent depuis la Chine et Dubaï,
+            payé en Mobile Money.
+          </p>
+          <div className="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
+            <Button
+              asChild
+              size="lg"
+              className="rounded-full h-13 px-7 bg-accent text-accent-foreground hover:bg-accent-hover btn-glow"
+            >
+              <Link to="/catalogue">
+                Voir les produits <ArrowRight className="w-4 h-4 ml-1" />
+              </Link>
+            </Button>
+            <Button
+              asChild
+              size="lg"
+              variant="outline"
+              className="rounded-full h-13 px-7 border-2 border-white/30 bg-white/5 text-primary-foreground hover:bg-white/10"
+            >
+              <Link to="/demander-un-produit">Créer ma demande</Link>
+            </Button>
           </div>
-        ))}
+        </div>
       </div>
     </section>
   );
