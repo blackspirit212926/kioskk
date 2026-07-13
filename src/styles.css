@@ -159,12 +159,14 @@
   html {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    scroll-behavior: smooth;
   }
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
     font-family: var(--font-sans);
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    text-rendering: optimizeLegibility;
   }
   h1, h2, h3, h4, h5 {
     font-family: var(--font-display);
@@ -174,6 +176,55 @@
     background: var(--color-accent);
     color: var(--color-accent-foreground);
   }
+  /* Accessible focus ring across the app — keyboard only */
+  :where(a, button, [role="button"], input, select, textarea, [tabindex]):focus-visible {
+    outline: 2px solid var(--color-ring);
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+  /* Route-anchor safe scroll (sticky navbar offset) */
+  :target {
+    scroll-margin-top: 6rem;
+  }
+  /* Never zoom iOS inputs on focus */
+  input, select, textarea {
+    font-size: 16px;
+  }
+  @media (min-width: 768px) {
+    input, select, textarea { font-size: inherit; }
+  }
+}
+
+/* Respect reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Skip-to-content link — visible on keyboard focus only */
+.skip-link {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -110%);
+  z-index: 100;
+  padding: 0.75rem 1.25rem;
+  border-radius: 9999px;
+  background: var(--color-primary);
+  color: var(--color-primary-foreground);
+  font-weight: 600;
+  font-size: 0.875rem;
+  box-shadow: var(--shadow-elevated);
+  transition: transform 0.2s ease;
+}
+.skip-link:focus-visible {
+  transform: translate(-50%, 1rem);
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
 }
 
 @utility container-kiosk {
