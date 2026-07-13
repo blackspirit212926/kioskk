@@ -1,6 +1,6 @@
 import { Link, useLocation, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { Heart, Menu, Search, ShoppingBag, User, X, LogOut, Package } from "lucide-react";
+import { Heart, Menu, Search, ShoppingBag, User, X, LogOut } from "lucide-react";
 import { KioskLogo } from "./kiosk-logo";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
@@ -8,14 +8,6 @@ import { useCart } from "@/contexts/cart-context";
 import { useCurrency } from "@/contexts/currency-context";
 import { useAuth } from "@/hooks/use-auth";
 import { CURRENCY_META, type Currency } from "@/lib/format";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 
 const NAV_LINKS = [
   { to: "/", label: "Accueil" },
