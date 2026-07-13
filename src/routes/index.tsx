@@ -236,11 +236,11 @@ function BrowserMockup() {
                   <div className="text-[13px] font-semibold line-clamp-1">{p.name}</div>
                   <div className="mt-1.5 flex items-center gap-2">
                     <span className="text-xs font-bold text-primary tabular-nums whitespace-nowrap">
-                      {formatXOF(p.price_xof)}
+                      {p.price_xof.toLocaleString("fr-FR")} FCFA
                     </span>
                     {p.compare_at_price_xof && p.compare_at_price_xof > p.price_xof && (
                       <span className="text-[10px] text-muted-foreground line-through tabular-nums">
-                        {formatXOF(p.compare_at_price_xof)}
+                        {p.compare_at_price_xof.toLocaleString("fr-FR")} FCFA
                       </span>
                     )}
                   </div>
