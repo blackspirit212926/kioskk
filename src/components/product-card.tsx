@@ -20,6 +20,7 @@ export interface ProductCardData {
   rating_avg: number;
   rating_count: number;
   image_url?: string | null;
+  shipping_mode?: "sea" | "air";
 }
 
 export function ProductCard({ product, badge }: { product: ProductCardData; badge?: string }) {
