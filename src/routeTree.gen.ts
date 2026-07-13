@@ -18,13 +18,17 @@ import { Route as CompteRouteImport } from './routes/compte'
 import { Route as CommentCaMarcheRouteImport } from './routes/comment-ca-marche'
 import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as CatalogueRouteImport } from './routes/catalogue'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as CompteIndexRouteImport } from './routes/compte.index'
+import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as ProduitSlugRouteImport } from './routes/produit.$slug'
+import { Route as CompteSoldeRouteImport } from './routes/compte.solde'
 import { Route as CompteProfilRouteImport } from './routes/compte.profil'
 import { Route as CompteFavorisRouteImport } from './routes/compte.favoris'
 import { Route as CompteCommandesRouteImport } from './routes/compte.commandes'
 import { Route as CompteAdressesRouteImport } from './routes/compte.adresses'
+import { Route as AdminSoldesRouteImport } from './routes/admin.soldes'
 import { Route as CompteCommandesIdRouteImport } from './routes/compte.commandes.$id'
 
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
@@ -72,6 +76,11 @@ const CatalogueRoute = CatalogueRouteImport.update({
   path: '/catalogue',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -82,10 +91,20 @@ const CompteIndexRoute = CompteIndexRouteImport.update({
   path: '/',
   getParentRoute: () => CompteRoute,
 } as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminRoute,
+} as any)
 const ProduitSlugRoute = ProduitSlugRouteImport.update({
   id: '/produit/$slug',
   path: '/produit/$slug',
   getParentRoute: () => rootRouteImport,
+} as any)
+const CompteSoldeRoute = CompteSoldeRouteImport.update({
+  id: '/solde',
+  path: '/solde',
+  getParentRoute: () => CompteRoute,
 } as any)
 const CompteProfilRoute = CompteProfilRouteImport.update({
   id: '/profil',
@@ -107,6 +126,11 @@ const CompteAdressesRoute = CompteAdressesRouteImport.update({
   path: '/adresses',
   getParentRoute: () => CompteRoute,
 } as any)
+const AdminSoldesRoute = AdminSoldesRouteImport.update({
+  id: '/soldes',
+  path: '/soldes',
+  getParentRoute: () => AdminRoute,
+} as any)
 const CompteCommandesIdRoute = CompteCommandesIdRouteImport.update({
   id: '/$id',
   path: '/$id',
@@ -115,6 +139,7 @@ const CompteCommandesIdRoute = CompteCommandesIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
   '/catalogue': typeof CatalogueRoute
   '/checkout': typeof CheckoutRoute
   '/comment-ca-marche': typeof CommentCaMarcheRoute
@@ -124,11 +149,14 @@ export interface FileRoutesByFullPath {
   '/panier': typeof PanierRoute
   '/realisations': typeof RealisationsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/admin/soldes': typeof AdminSoldesRoute
   '/compte/adresses': typeof CompteAdressesRoute
   '/compte/commandes': typeof CompteCommandesRouteWithChildren
   '/compte/favoris': typeof CompteFavorisRoute
   '/compte/profil': typeof CompteProfilRoute
+  '/compte/solde': typeof CompteSoldeRoute
   '/produit/$slug': typeof ProduitSlugRoute
+  '/admin/': typeof AdminIndexRoute
   '/compte/': typeof CompteIndexRoute
   '/compte/commandes/$id': typeof CompteCommandesIdRoute
 }
@@ -142,17 +170,21 @@ export interface FileRoutesByTo {
   '/panier': typeof PanierRoute
   '/realisations': typeof RealisationsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/admin/soldes': typeof AdminSoldesRoute
   '/compte/adresses': typeof CompteAdressesRoute
   '/compte/commandes': typeof CompteCommandesRouteWithChildren
   '/compte/favoris': typeof CompteFavorisRoute
   '/compte/profil': typeof CompteProfilRoute
+  '/compte/solde': typeof CompteSoldeRoute
   '/produit/$slug': typeof ProduitSlugRoute
+  '/admin': typeof AdminIndexRoute
   '/compte': typeof CompteIndexRoute
   '/compte/commandes/$id': typeof CompteCommandesIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
   '/catalogue': typeof CatalogueRoute
   '/checkout': typeof CheckoutRoute
   '/comment-ca-marche': typeof CommentCaMarcheRoute
@@ -162,11 +194,14 @@ export interface FileRoutesById {
   '/panier': typeof PanierRoute
   '/realisations': typeof RealisationsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/admin/soldes': typeof AdminSoldesRoute
   '/compte/adresses': typeof CompteAdressesRoute
   '/compte/commandes': typeof CompteCommandesRouteWithChildren
   '/compte/favoris': typeof CompteFavorisRoute
   '/compte/profil': typeof CompteProfilRoute
+  '/compte/solde': typeof CompteSoldeRoute
   '/produit/$slug': typeof ProduitSlugRoute
+  '/admin/': typeof AdminIndexRoute
   '/compte/': typeof CompteIndexRoute
   '/compte/commandes/$id': typeof CompteCommandesIdRoute
 }
@@ -174,6 +209,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/admin'
     | '/catalogue'
     | '/checkout'
     | '/comment-ca-marche'
@@ -183,11 +219,14 @@ export interface FileRouteTypes {
     | '/panier'
     | '/realisations'
     | '/sitemap.xml'
+    | '/admin/soldes'
     | '/compte/adresses'
     | '/compte/commandes'
     | '/compte/favoris'
     | '/compte/profil'
+    | '/compte/solde'
     | '/produit/$slug'
+    | '/admin/'
     | '/compte/'
     | '/compte/commandes/$id'
   fileRoutesByTo: FileRoutesByTo
@@ -201,16 +240,20 @@ export interface FileRouteTypes {
     | '/panier'
     | '/realisations'
     | '/sitemap.xml'
+    | '/admin/soldes'
     | '/compte/adresses'
     | '/compte/commandes'
     | '/compte/favoris'
     | '/compte/profil'
+    | '/compte/solde'
     | '/produit/$slug'
+    | '/admin'
     | '/compte'
     | '/compte/commandes/$id'
   id:
     | '__root__'
     | '/'
+    | '/admin'
     | '/catalogue'
     | '/checkout'
     | '/comment-ca-marche'
@@ -220,17 +263,21 @@ export interface FileRouteTypes {
     | '/panier'
     | '/realisations'
     | '/sitemap.xml'
+    | '/admin/soldes'
     | '/compte/adresses'
     | '/compte/commandes'
     | '/compte/favoris'
     | '/compte/profil'
+    | '/compte/solde'
     | '/produit/$slug'
+    | '/admin/'
     | '/compte/'
     | '/compte/commandes/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRouteWithChildren
   CatalogueRoute: typeof CatalogueRoute
   CheckoutRoute: typeof CheckoutRoute
   CommentCaMarcheRoute: typeof CommentCaMarcheRoute
@@ -308,6 +355,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CatalogueRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -322,12 +376,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CompteIndexRouteImport
       parentRoute: typeof CompteRoute
     }
+    '/admin/': {
+      id: '/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/produit/$slug': {
       id: '/produit/$slug'
       path: '/produit/$slug'
       fullPath: '/produit/$slug'
       preLoaderRoute: typeof ProduitSlugRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/compte/solde': {
+      id: '/compte/solde'
+      path: '/solde'
+      fullPath: '/compte/solde'
+      preLoaderRoute: typeof CompteSoldeRouteImport
+      parentRoute: typeof CompteRoute
     }
     '/compte/profil': {
       id: '/compte/profil'
@@ -357,6 +425,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CompteAdressesRouteImport
       parentRoute: typeof CompteRoute
     }
+    '/admin/soldes': {
+      id: '/admin/soldes'
+      path: '/soldes'
+      fullPath: '/admin/soldes'
+      preLoaderRoute: typeof AdminSoldesRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/compte/commandes/$id': {
       id: '/compte/commandes/$id'
       path: '/$id'
@@ -366,6 +441,18 @@ declare module '@tanstack/react-router' {
     }
   }
 }
+
+interface AdminRouteChildren {
+  AdminSoldesRoute: typeof AdminSoldesRoute
+  AdminIndexRoute: typeof AdminIndexRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminSoldesRoute: AdminSoldesRoute,
+  AdminIndexRoute: AdminIndexRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
 interface CompteCommandesRouteChildren {
   CompteCommandesIdRoute: typeof CompteCommandesIdRoute
@@ -384,6 +471,7 @@ interface CompteRouteChildren {
   CompteCommandesRoute: typeof CompteCommandesRouteWithChildren
   CompteFavorisRoute: typeof CompteFavorisRoute
   CompteProfilRoute: typeof CompteProfilRoute
+  CompteSoldeRoute: typeof CompteSoldeRoute
   CompteIndexRoute: typeof CompteIndexRoute
 }
 
@@ -392,6 +480,7 @@ const CompteRouteChildren: CompteRouteChildren = {
   CompteCommandesRoute: CompteCommandesRouteWithChildren,
   CompteFavorisRoute: CompteFavorisRoute,
   CompteProfilRoute: CompteProfilRoute,
+  CompteSoldeRoute: CompteSoldeRoute,
   CompteIndexRoute: CompteIndexRoute,
 }
 
@@ -400,6 +489,7 @@ const CompteRouteWithChildren =
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRoute: AdminRouteWithChildren,
   CatalogueRoute: CatalogueRoute,
   CheckoutRoute: CheckoutRoute,
   CommentCaMarcheRoute: CommentCaMarcheRoute,
@@ -414,13 +504,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

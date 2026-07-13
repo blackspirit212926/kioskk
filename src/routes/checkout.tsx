@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
-import { ArrowLeft, ArrowRight, Check, Loader2, MapPin, Upload, ShieldCheck, Wallet } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, Loader2, MapPin, Upload, ShieldCheck, Wallet, Tag, X } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { useCart } from "@/contexts/cart-context";
@@ -19,6 +19,7 @@ export const Route = createFileRoute("/checkout")({
 });
 
 type PaymentMethod = "wave" | "orange_money" | "free_money";
+type PaymentType = "full" | "split_50_50";
 
 const PAYMENT_OPTIONS: { id: PaymentMethod; label: string; color: string; number: string }[] = [
   { id: "wave", label: "Wave", color: "bg-[#1DC8F1] text-white", number: "+221 77 000 00 01" },
@@ -41,7 +42,6 @@ function CheckoutPage() {
     if (items.length === 0 && step !== 3) navigate({ to: "/catalogue", replace: true });
   }, [items.length, step, navigate]);
 
-  // Step 1 — address
   const [recipient, setRecipient] = useState("");
   const [phone, setPhone] = useState("");
   const [city, setCity] = useState("Dakar");
@@ -50,13 +50,44 @@ function CheckoutPage() {
   const [details, setDetails] = useState("");
   const [note, setNote] = useState("");
 
-  // Step 2 — payment
   const [method, setMethod] = useState<PaymentMethod>("wave");
+  const [paymentType, setPaymentType] = useState<PaymentType>("full");
   const [proofFile, setProofFile] = useState<File | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [orderNumber, setOrderNumber] = useState<string | null>(null);
 
+  const [promoInput, setPromoInput] = useState("");
+  const [promo, setPromo] = useState<{ code: string; discount: number } | null>(null);
+  const [applyingPromo, setApplyingPromo] = useState(false);
+
   const selected = useMemo(() => PAYMENT_OPTIONS.find((p) => p.id === method)!, [method]);
+  const discount = promo?.discount ?? 0;
+  const totalAfterDiscount = Math.max(0, subtotalXof - discount);
+  const amountDueNow = paymentType === "split_50_50" ? Math.ceil(totalAfterDiscount / 2) : totalAfterDiscount;
+  const amountLater = totalAfterDiscount - amountDueNow;
+
+  async function applyPromo() {
+    if (!promoInput.trim()) return;
+    setApplyingPromo(true);
+    try {
+      const { data, error } = await supabase.rpc("apply_promo_code", {
+        _code: promoInput.trim().toUpperCase(),
+        _subtotal_xof: subtotalXof,
+      });
+      if (error) throw error;
+      const row = data?.[0];
+      if (!row || !row.valid) {
+        toast.error(row?.reason ?? "Code invalide");
+        return;
+      }
+      setPromo({ code: promoInput.trim().toUpperCase(), discount: Number(row.discount_xof) });
+      toast.success(`Code appliqué : −${formatPrice(Number(row.discount_xof), currency, rates)}`);
+    } catch (err) {
+      toast.error("Impossible de valider ce code", { description: (err as Error).message });
+    } finally {
+      setApplyingPromo(false);
+    }
+  }
 
   async function submitOrder() {
     if (!user) return;
@@ -74,10 +105,12 @@ function CheckoutPage() {
           user_id: user.id,
           order_number: "",
           subtotal_xof: subtotalXof,
-          total_paid_xof: subtotalXof,
+          total_paid_xof: amountDueNow,
           payment_method: method,
-          payment_type: "full",
+          payment_type: paymentType,
           payment_proof_url: up.data.path,
+          promo_code: promo?.code ?? null,
+          discount_xof: discount,
           status: "pending_payment",
           customer_note: note || null,
           address_snapshot: addrSnap,
@@ -98,6 +131,33 @@ function CheckoutPage() {
       }));
       const { error: iErr } = await supabase.from("order_items").insert(rows);
       if (iErr) throw iErr;
+
+      // Record this payment as a versement
+      await supabase.from("order_payments").insert({
+        order_id: order.id,
+        kind: paymentType === "split_50_50" ? "deposit" : "full",
+        amount_xof: amountDueNow,
+        method,
+        proof_url: up.data.path,
+        status: "pending",
+      });
+
+      // Record promo redemption
+      if (promo) {
+        const { data: pc } = await supabase
+          .from("promo_codes")
+          .select("id")
+          .eq("code", promo.code)
+          .maybeSingle();
+        if (pc) {
+          await supabase.from("promo_redemptions").insert({
+            order_id: order.id,
+            promo_code_id: pc.id,
+            code: promo.code,
+            amount_saved_xof: discount,
+          });
+        }
+      }
 
       setOrderNumber(order.order_number);
       setStep(3);
@@ -130,10 +190,7 @@ function CheckoutPage() {
                 <div className="w-10 h-10 rounded-full bg-accent/15 text-primary flex items-center justify-center"><MapPin className="w-5 h-5" /></div>
                 <h2 className="font-display text-xl md:text-2xl font-bold">Adresse de livraison</h2>
               </div>
-              <form
-                onSubmit={(e) => { e.preventDefault(); setStep(2); }}
-                className="grid md:grid-cols-2 gap-4"
-              >
+              <form onSubmit={(e) => { e.preventDefault(); setStep(2); }} className="grid md:grid-cols-2 gap-4">
                 <Field label="Nom du destinataire" required value={recipient} onChange={setRecipient} placeholder="Aïcha Diop" />
                 <Field label="Téléphone" required value={phone} onChange={setPhone} placeholder="+221 77 000 00 00" />
                 <Field label="Ville" required value={city} onChange={setCity} />
@@ -165,6 +222,24 @@ function CheckoutPage() {
                 <h2 className="font-display text-xl md:text-2xl font-bold">Paiement</h2>
               </div>
 
+              {/* Payment type selector */}
+              <div className="grid sm:grid-cols-2 gap-3 mb-6">
+                <button
+                  onClick={() => setPaymentType("full")}
+                  className={`text-left p-4 rounded-2xl border-2 transition-all ${paymentType === "full" ? "border-primary bg-primary/5" : "border-border hover:border-border/80"}`}
+                >
+                  <div className="font-semibold">Paiement en une fois</div>
+                  <div className="text-xs text-muted-foreground mt-1">Vous réglez le prix produit maintenant. Frais de transit et livraison à l'arrivée.</div>
+                </button>
+                <button
+                  onClick={() => setPaymentType("split_50_50")}
+                  className={`text-left p-4 rounded-2xl border-2 transition-all ${paymentType === "split_50_50" ? "border-primary bg-primary/5" : "border-border hover:border-border/80"}`}
+                >
+                  <div className="font-semibold">Paiement en deux fois <span className="text-accent">50 / 50</span></div>
+                  <div className="text-xs text-muted-foreground mt-1">50 % à la commande, 50 % à l'arrivée du colis à Dakar.</div>
+                </button>
+              </div>
+
               <div className="grid md:grid-cols-3 gap-3 mb-6">
                 {PAYMENT_OPTIONS.map((opt) => (
                   <button
@@ -179,6 +254,27 @@ function CheckoutPage() {
                 ))}
               </div>
 
+              {/* Promo code */}
+              <div className="mb-6">
+                <Label className="flex items-center gap-2"><Tag className="w-4 h-4" /> Code promo</Label>
+                {promo ? (
+                  <div className="mt-2 flex items-center justify-between rounded-2xl bg-success/10 border border-success/30 p-3">
+                    <div>
+                      <div className="font-semibold text-success">{promo.code}</div>
+                      <div className="text-xs text-muted-foreground">−{formatPrice(promo.discount, currency, rates)}</div>
+                    </div>
+                    <button onClick={() => { setPromo(null); setPromoInput(""); }} className="p-1 hover:bg-background rounded-full"><X className="w-4 h-4" /></button>
+                  </div>
+                ) : (
+                  <div className="mt-2 flex gap-2">
+                    <Input value={promoInput} onChange={(e) => setPromoInput(e.target.value.toUpperCase())} placeholder="EX: BIENVENUE" className="h-11 rounded-xl uppercase" />
+                    <Button type="button" variant="outline" onClick={applyPromo} disabled={applyingPromo || !promoInput.trim()} className="rounded-xl h-11">
+                      {applyingPromo ? <Loader2 className="w-4 h-4 animate-spin" /> : "Appliquer"}
+                    </Button>
+                  </div>
+                )}
+              </div>
+
               <div className="rounded-2xl bg-surface p-5 mb-6">
                 <div className="text-xs uppercase tracking-widest text-muted-foreground mb-2">Envoyez le paiement à</div>
                 <div className="flex items-baseline justify-between flex-wrap gap-2">
@@ -187,21 +283,21 @@ function CheckoutPage() {
                     <div className="text-sm text-muted-foreground mt-0.5">Kiosk SARL — {selected.label}</div>
                   </div>
                   <div className="text-right">
-                    <div className="text-xs text-muted-foreground">Montant à envoyer</div>
-                    <div className="font-display text-2xl font-bold text-primary">{formatPrice(subtotalXof, currency, rates)}</div>
+                    <div className="text-xs text-muted-foreground">{paymentType === "split_50_50" ? "Acompte à envoyer" : "Montant à envoyer"}</div>
+                    <div className="font-display text-2xl font-bold text-primary">{formatPrice(amountDueNow, currency, rates)}</div>
                   </div>
                 </div>
+                {paymentType === "split_50_50" && (
+                  <div className="mt-3 pt-3 border-t border-border/60 text-xs text-muted-foreground">
+                    Solde de <strong className="text-foreground">{formatPrice(amountLater, currency, rates)}</strong> à régler à l'arrivée du colis à Dakar.
+                  </div>
+                )}
               </div>
 
               <div>
                 <Label>Preuve de paiement (capture d'écran)</Label>
                 <label className="mt-2 block cursor-pointer">
-                  <input
-                    type="file"
-                    accept="image/*,application/pdf"
-                    className="sr-only"
-                    onChange={(e) => setProofFile(e.target.files?.[0] ?? null)}
-                  />
+                  <input type="file" accept="image/*,application/pdf" className="sr-only" onChange={(e) => setProofFile(e.target.files?.[0] ?? null)} />
                   <div className={`rounded-2xl border-2 border-dashed p-6 text-center transition-colors ${proofFile ? "border-success bg-success/5" : "border-border hover:border-primary/50"}`}>
                     {proofFile ? (
                       <div className="flex items-center justify-center gap-2 text-success font-medium">
@@ -236,20 +332,14 @@ function CheckoutPage() {
                 <Check className="w-8 h-8" />
               </div>
               <h2 className="mt-6 font-display text-2xl md:text-3xl font-bold">Merci pour votre commande !</h2>
-              <p className="mt-3 text-muted-foreground">
-                Nous avons bien reçu votre paiement. Notre équipe vérifie sous 24 h.
-              </p>
+              <p className="mt-3 text-muted-foreground">Nous avons bien reçu votre paiement. Notre équipe vérifie sous 24 h.</p>
               <div className="mt-6 inline-flex items-center gap-3 px-5 py-3 rounded-full bg-surface">
                 <span className="text-sm text-muted-foreground">Numéro :</span>
                 <span className="font-display font-bold text-lg">{orderNumber}</span>
               </div>
               <div className="mt-8 flex flex-wrap justify-center gap-3">
-                <Button asChild size="lg" className="rounded-full h-12 px-7">
-                  <Link to="/compte">Voir mes commandes</Link>
-                </Button>
-                <Button asChild variant="outline" size="lg" className="rounded-full h-12">
-                  <Link to="/catalogue">Continuer mes achats</Link>
-                </Button>
+                <Button asChild size="lg" className="rounded-full h-12 px-7"><Link to="/compte">Voir mes commandes</Link></Button>
+                <Button asChild variant="outline" size="lg" className="rounded-full h-12"><Link to="/catalogue">Continuer mes achats</Link></Button>
               </div>
             </section>
           )}
@@ -270,9 +360,16 @@ function CheckoutPage() {
                 </li>
               ))}
             </ul>
-            <div className="border-t border-border pt-4 flex items-baseline justify-between">
-              <span className="font-semibold">Total à payer</span>
-              <span className="font-display text-xl font-bold">{formatPrice(subtotalXof, currency, rates)}</span>
+            <div className="border-t border-border pt-4 space-y-2 text-sm">
+              <Row label="Sous-total" value={formatPrice(subtotalXof, currency, rates)} />
+              {promo && <Row label={`Remise (${promo.code})`} value={`−${formatPrice(discount, currency, rates)}`} accent />}
+              <Row label="Total" value={formatPrice(totalAfterDiscount, currency, rates)} bold />
+              {paymentType === "split_50_50" && (
+                <>
+                  <Row label="À payer maintenant" value={formatPrice(amountDueNow, currency, rates)} bold />
+                  <Row label="Solde à l'arrivée" value={formatPrice(amountLater, currency, rates)} muted />
+                </>
+              )}
             </div>
             <div className="flex items-center gap-2 mt-4 text-xs text-muted-foreground">
               <ShieldCheck className="w-3.5 h-3.5 text-success" /> Paiement sécurisé
@@ -280,6 +377,15 @@ function CheckoutPage() {
           </div>
         </aside>
       </div>
+    </div>
+  );
+}
+
+function Row({ label, value, bold, muted, accent }: { label: string; value: string; bold?: boolean; muted?: boolean; accent?: boolean }) {
+  return (
+    <div className="flex items-baseline justify-between">
+      <span className={muted ? "text-muted-foreground" : ""}>{label}</span>
+      <span className={`${bold ? "font-display text-lg font-bold" : ""} ${accent ? "text-success font-semibold" : ""} ${muted ? "text-muted-foreground" : ""}`}>{value}</span>
     </div>
   );
 }

@@ -21,3 +21,22 @@ export const STATUS_TIMELINE = [
   "out_for_delivery",
   "delivered",
 ] as const;
+
+export const PAYMENT_KIND_LABELS: Record<string, string> = {
+  deposit: "Acompte",
+  balance: "Solde",
+  full: "Paiement complet",
+};
+
+export const PAYMENT_STATUS_LABELS: Record<string, string> = {
+  pending: "En vérification",
+  confirmed: "Confirmé",
+  rejected: "Rejeté",
+};
+
+export const PAYMENT_METHOD_LABELS: Record<string, string> = {
+  wave: "Wave",
+  orange_money: "Orange Money",
+  free_money: "Free Money",
+  cash_on_delivery: "Cash à la livraison",
+};

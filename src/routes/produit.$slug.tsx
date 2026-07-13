@@ -1,7 +1,7 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import { Heart, ShoppingBag, Zap, Sparkles, Share2, Truck, ShieldCheck, ArrowLeft, Star } from "lucide-react";
+import { Heart, ShoppingBag, Zap, Sparkles, Share2, Truck, ShieldCheck, ArrowLeft, Star, Users, Clock } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -101,10 +101,21 @@ function ProductPage() {
     openDrawer();
   };
 
+  const groupBuyActive =
+    product.group_buy_enabled &&
+    product.group_buy_threshold &&
+    (!product.group_buy_deadline || new Date(product.group_buy_deadline) > new Date());
+  const groupBuyPct = groupBuyActive
+    ? Math.min(100, Math.round((product.group_buy_current / (product.group_buy_threshold ?? 1)) * 100))
+    : 0;
+  const daysLeft = product.group_buy_deadline
+    ? Math.max(0, Math.ceil((new Date(product.group_buy_deadline).getTime() - Date.now()) / 86400000))
+    : null;
+
   const actionButtons = (
     <>
       <Button onClick={handleAdd} size="lg" variant="outline" className="rounded-full h-13 px-6 flex-1">
-        <ShoppingBag className="w-4 h-4 mr-2" /> Ajouter au panier
+        <ShoppingBag className="w-4 h-4 mr-2" /> {groupBuyActive ? "Rejoindre l'achat groupé" : "Ajouter au panier"}
       </Button>
       <Button onClick={handleBuyNow} size="lg" className="rounded-full h-13 px-6 flex-1 btn-glow">
         <Zap className="w-4 h-4 mr-2" /> Commander maintenant
@@ -249,6 +260,32 @@ function ProductPage() {
               </button>
             </div>
           </div>
+
+          {/* Group buy panel */}
+          {groupBuyActive && (
+            <div className="mt-6 rounded-3xl bg-gradient-to-br from-accent/15 to-accent/5 border border-accent/30 p-5">
+              <div className="flex items-center gap-2 text-accent-foreground">
+                <Users className="w-4 h-4" />
+                <span className="text-xs uppercase tracking-widest font-semibold">Achat groupé</span>
+              </div>
+              <div className="mt-3 flex items-baseline justify-between gap-4">
+                <div className="font-display font-bold text-lg">
+                  {product.group_buy_current} / {product.group_buy_threshold} précommandés
+                </div>
+                {daysLeft !== null && (
+                  <div className="text-xs text-muted-foreground flex items-center gap-1">
+                    <Clock className="w-3 h-3" /> {daysLeft > 0 ? `Encore ${daysLeft} jour${daysLeft > 1 ? "s" : ""}` : "Dernier jour"}
+                  </div>
+                )}
+              </div>
+              <div className="mt-2 h-2 rounded-full bg-background/60 overflow-hidden">
+                <div className="h-full bg-accent transition-all" style={{ width: `${groupBuyPct}%` }} />
+              </div>
+              <p className="text-xs text-muted-foreground mt-3 leading-relaxed">
+                Votre précommande n'est confirmée que si le seuil de {product.group_buy_threshold} est atteint avant l'échéance. Sinon, votre versement est intégralement remboursé.
+              </p>
+            </div>
+          )}
 
           {/* Actions */}
           <div className="mt-6 hidden md:flex flex-row gap-3">{actionButtons}</div>
