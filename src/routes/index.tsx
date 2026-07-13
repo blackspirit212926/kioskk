@@ -39,21 +39,21 @@ function HomePage() {
    ============================================================ */
 function Hero() {
   return (
-    <section className="relative overflow-hidden bg-surface/50 pt-16 md:pt-20 pb-24 md:pb-32">
+    <section className="relative overflow-hidden bg-primary pt-16 md:pt-20 pb-24 md:pb-32">
       {/* subtle grid backdrop */}
       <div
         aria-hidden
-        className="absolute inset-0 pointer-events-none opacity-[0.35]"
+        className="absolute inset-0 pointer-events-none opacity-[0.18]"
         style={{
           backgroundImage:
-            "linear-gradient(to right, oklch(0 0 0 / 0.04) 1px, transparent 1px), linear-gradient(to bottom, oklch(0 0 0 / 0.04) 1px, transparent 1px)",
+            "linear-gradient(to right, oklch(1 0 0 / 0.08) 1px, transparent 1px), linear-gradient(to bottom, oklch(1 0 0 / 0.08) 1px, transparent 1px)",
           backgroundSize: "56px 56px",
           maskImage: "radial-gradient(ellipse at center, black 45%, transparent 75%)",
         }}
       />
       <div
         aria-hidden
-        className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[900px] h-[900px] rounded-full blur-3xl opacity-30 pointer-events-none"
+        className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[900px] h-[900px] rounded-full blur-3xl opacity-40 pointer-events-none"
         style={{
           background:
             "radial-gradient(circle, oklch(0.82 0.14 75 / 0.35), oklch(0.22 0.10 275 / 0.15) 55%, transparent 75%)",
@@ -61,47 +61,48 @@ function Hero() {
       />
 
       <div className="container-kiosk relative max-w-4xl mx-auto text-center kiosk-fade-up">
-        <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-card border border-border shadow-soft text-[11px] font-semibold uppercase tracking-wider text-primary">
+        <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary-light/60 border border-white/15 text-[11px] font-semibold uppercase tracking-wider text-background">
           <Star className="w-3 h-3 fill-accent text-accent" />
           Précommandes ouvertes — Chine & Dubaï
         </span>
 
-        <h1 className="mt-6 font-display font-bold tracking-tight leading-[1.02] text-balance-fix text-[2.5rem] sm:text-6xl md:text-7xl lg:text-[5.5rem] text-primary">
-          Commandez depuis la{" "}
+        <h1 className="mt-6 font-display font-bold tracking-tight leading-[1.02] text-balance-fix text-[2.5rem] sm:text-6xl md:text-7xl lg:text-[5.5rem] text-background">
+          La{" "}
           <span
-            className="italic font-normal text-primary/90"
+            className="italic font-normal text-background/90"
             style={{ fontFamily: "var(--font-serif)" }}
           >
             Chine
           </span>{" "}
           et{" "}
           <span
-            className="italic font-normal text-primary/90"
+            className="italic font-normal text-background/90"
             style={{ fontFamily: "var(--font-serif)" }}
           >
             Dubaï
           </span>
-          . Recevez en{" "}
+          , à portée de{" "}
           <span
-            className="italic font-normal text-primary/90"
+            className="italic font-normal text-background/90"
             style={{ fontFamily: "var(--font-serif)" }}
           >
-            un rien de temps
-          </span>{" "}
-          chez vous
+            clic
+          </span>
           <span className="text-accent">.</span>
         </h1>
 
-        <p className="mt-7 text-base md:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+
+        <p className="mt-7 text-base md:text-lg text-background/75 max-w-2xl mx-auto leading-relaxed">
           Précommandez vos produits préférés, réglez par Wave, Orange Money ou Free Money.
           Kiosk source, importe et livre à votre porte — de Guangzhou et Dubaï jusqu'à Dakar.
         </p>
+
 
         <div className="mt-9 flex flex-col sm:flex-row gap-3 justify-center">
           <Button
             asChild
             size="lg"
-            className="rounded-full h-13 px-7 text-base bg-primary text-primary-foreground hover:bg-primary-light btn-glow"
+            className="rounded-full h-13 px-7 text-base bg-accent text-accent-foreground hover:bg-accent-hover btn-glow"
           >
             <Link to="/catalogue">
               Découvrir le catalogue <ArrowRight className="w-4 h-4 ml-1" />
@@ -111,12 +112,13 @@ function Hero() {
             asChild
             size="lg"
             variant="outline"
-            className="rounded-full h-13 px-7 text-base border-2 border-primary bg-primary text-primary-foreground hover:bg-primary-light"
+            className="rounded-full h-13 px-7 text-base border-2 border-white/30 bg-transparent text-background hover:bg-white/10 hover:text-background"
           >
             <Link to="/compte/commandes">
               <Package className="w-4 h-4 mr-1" /> Mes commandes
             </Link>
           </Button>
+
         </div>
 
         {/* social proof row */}
@@ -134,7 +136,7 @@ function Hero() {
             {Array.from({ length: 5 }).map((_, i) => (
               <Star key={i} className="w-3.5 h-3.5 fill-current" />
             ))}
-            <span className="ml-2 text-sm text-muted-foreground">+100 clients satisfaits</span>
+            <span className="ml-2 text-sm text-background/70">+100 clients satisfaits</span>
           </div>
         </div>
       </div>
