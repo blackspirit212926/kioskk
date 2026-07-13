@@ -92,10 +92,11 @@ function Hero() {
         </h1>
 
 
-        <p className="mt-7 text-base md:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+        <p className="mt-7 text-base md:text-lg text-background/75 max-w-2xl mx-auto leading-relaxed">
           Précommandez vos produits préférés, réglez par Wave, Orange Money ou Free Money.
           Kiosk source, importe et livre à votre porte — de Guangzhou et Dubaï jusqu'à Dakar.
         </p>
+
 
         <div className="mt-9 flex flex-col sm:flex-row gap-3 justify-center">
           <Button
