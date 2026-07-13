@@ -26,7 +26,8 @@ const NAV_LINKS = [
 ] as const;
 
 const PILL_ICON_BUTTON =
-  "inline-flex items-center justify-center w-10 h-10 rounded-full text-sidebar-foreground/85 hover:bg-sidebar-foreground/10 hover:text-sidebar-foreground transition-colors";
+  "items-center justify-center w-10 h-10 rounded-full text-sidebar-foreground/85 hover:bg-sidebar-foreground/10 hover:text-sidebar-foreground transition-colors";
+
 
 export function Navbar() {
   const { count, openDrawer } = useCart();
