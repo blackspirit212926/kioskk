@@ -84,28 +84,14 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
   head: () => ({
-    meta: [
-      { charSet: "utf-8" },
-      { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Kiosk — Importé pour vous. Livré chez vous." },
-      {
-        name: "description",
-        content:
-          "Kiosk vous permet de précommander depuis le Sénégal des produits importés directement de Chine et de Dubaï. Sourcing, transport et livraison, tout inclus.",
-      },
-      { name: "author", content: "Kiosk" },
-      { property: "og:title", content: "Kiosk — Importé pour vous. Livré chez vous." },
-      {
-        property: "og:description",
-        content: "Kiosk vous permet de précommander depuis le Sénégal des produits importés directement de Chine et de Dubaï. Sourcing, transport et livraison, tout inclus.",
-      },
-      { property: "og:type", content: "website" },
-      { property: "og:locale", content: "fr_SN" },
-      { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "Kiosk — Importé pour vous. Livré chez vous." },
-      { name: "twitter:description", content: "Kiosk vous permet de précommander depuis le Sénégal des produits importés directement de Chine et de Dubaï. Sourcing, transport et livraison, tout inclus." },
-      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/115e324e-13f9-400e-871f-e7d28e932662/id-preview-77979226--6bc34103-b3c2-4400-9b4c-a9c09e8af8f7.lovable.app-1783555676390.png" },
-      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/115e324e-13f9-400e-871f-e7d28e932662/id-preview-77979226--6bc34103-b3c2-4400-9b4c-a9c09e8af8f7.lovable.app-1783555676390.png" },
+    links: [
+      { rel: "stylesheet", href: "https://api.fontshare.com/v2/css?f[]=agrandir@400,500,700&display=swap" },
+      { rel: "stylesheet", href: "https://api.fontshare.com/v2/css?f[]=agrandir-grand@700,800&display=swap" },
+      { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap" },
+      { rel: "stylesheet", href: appCss },
+      { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+      { rel: "apple-touch-icon", href: "/icon-512.png" },
+      { rel: "manifest", href: "/manifest.webmanifest" },
     ],
     links: [
       { rel: "stylesheet", href: "https://api.fontshare.com/v2/css?f[]=agrandir@400,500,700&display=swap" },
