@@ -1,0 +1,17 @@
+{
+  "name": "Kiosk — Importé pour vous",
+  "short_name": "Kiosk",
+  "description": "Précommandez depuis le Sénégal vos produits importés de Chine et de Dubaï. Sourcing, transport et livraison inclus.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#FFFBF4",
+  "theme_color": "#11114B",
+  "lang": "fr-SN",
+  "categories": ["shopping", "lifestyle"],
+  "icons": [
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
