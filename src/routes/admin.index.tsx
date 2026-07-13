@@ -26,5 +26,3 @@ function AdminCard({ to, title, desc, icon: Icon }: { to: "/admin/soldes"; title
     </Link>
   );
 }
-
-export { AdminHome };
