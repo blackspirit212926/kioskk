@@ -12,8 +12,8 @@
  */
 
 @theme inline {
-  --font-display: "Cabinet Grotesk", "Space Grotesk Variable", system-ui, sans-serif;
-  --font-sans: "Plus Jakarta Sans Variable", "Plus Jakarta Sans", system-ui, sans-serif;
+  --font-display: "Agrandir Grand", "Agrandir", system-ui, sans-serif;
+  --font-sans: "Agrandir", "Plus Jakarta Sans Variable", system-ui, sans-serif;
 
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
