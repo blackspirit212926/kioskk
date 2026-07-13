@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { formatXOF } from "@/lib/format";
+// price rendering uses inline FCFA formatting
 
 export const Route = createFileRoute("/")({
   component: HomePage,
