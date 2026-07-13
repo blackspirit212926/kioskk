@@ -102,7 +102,7 @@ function Hero() {
           <Button
             asChild
             size="lg"
-            className="rounded-full h-13 px-7 text-base bg-primary text-primary-foreground hover:bg-primary-light btn-glow"
+            className="rounded-full h-13 px-7 text-base bg-accent text-accent-foreground hover:bg-accent-hover btn-glow"
           >
             <Link to="/catalogue">
               Découvrir le catalogue <ArrowRight className="w-4 h-4 ml-1" />
@@ -112,12 +112,13 @@ function Hero() {
             asChild
             size="lg"
             variant="outline"
-            className="rounded-full h-13 px-7 text-base border-2 border-primary bg-primary text-primary-foreground hover:bg-primary-light"
+            className="rounded-full h-13 px-7 text-base border-2 border-white/30 bg-transparent text-background hover:bg-white/10 hover:text-background"
           >
             <Link to="/compte/commandes">
               <Package className="w-4 h-4 mr-1" /> Mes commandes
             </Link>
           </Button>
+
         </div>
 
         {/* social proof row */}
