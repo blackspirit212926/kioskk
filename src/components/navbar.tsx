@@ -153,7 +153,8 @@ export function Navbar() {
       </header>
 
       {mobileOpen && (
-        <div className="md:hidden max-w-4xl mx-auto mt-2 rounded-3xl bg-sidebar shadow-2xl p-3 kiosk-fade-up">
+        <div id="mobile-menu" className="md:hidden max-w-4xl mx-auto mt-2 rounded-3xl bg-sidebar shadow-2xl p-3 kiosk-fade-up">
+
           <div className="relative mb-2">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-sidebar-foreground/60 pointer-events-none" />
             <input
