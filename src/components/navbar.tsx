@@ -123,7 +123,7 @@ export function Navbar() {
 
         <button
           onClick={openDrawer}
-          className={`relative ${PILL_ICON_BUTTON}`}
+          className={`relative inline-flex ${PILL_ICON_BUTTON}`}
           aria-label={count > 0 ? `Panier, ${count} article${count > 1 ? "s" : ""}` : "Panier vide"}
         >
           <ShoppingBag className="w-4.5 h-4.5" aria-hidden="true" />
