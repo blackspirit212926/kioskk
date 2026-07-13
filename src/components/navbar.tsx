@@ -144,7 +144,7 @@ export function Navbar() {
 
         <button
           onClick={() => setMobileOpen((v) => !v)}
-          className={`md:hidden ${PILL_ICON_BUTTON}`}
+          className={`md:hidden inline-flex ${PILL_ICON_BUTTON}`}
           aria-label={mobileOpen ? "Fermer le menu" : "Ouvrir le menu"}
           aria-expanded={mobileOpen}
           aria-controls="mobile-menu"
