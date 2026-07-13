@@ -21,6 +21,7 @@ import { Route as CatalogueRouteImport } from './routes/catalogue'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as CompteIndexRouteImport } from './routes/compte.index'
 import { Route as ProduitSlugRouteImport } from './routes/produit.$slug'
+import { Route as CompteSoldeRouteImport } from './routes/compte.solde'
 import { Route as CompteProfilRouteImport } from './routes/compte.profil'
 import { Route as CompteFavorisRouteImport } from './routes/compte.favoris'
 import { Route as CompteCommandesRouteImport } from './routes/compte.commandes'
@@ -87,6 +88,11 @@ const ProduitSlugRoute = ProduitSlugRouteImport.update({
   path: '/produit/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CompteSoldeRoute = CompteSoldeRouteImport.update({
+  id: '/solde',
+  path: '/solde',
+  getParentRoute: () => CompteRoute,
+} as any)
 const CompteProfilRoute = CompteProfilRouteImport.update({
   id: '/profil',
   path: '/profil',
@@ -128,6 +134,7 @@ export interface FileRoutesByFullPath {
   '/compte/commandes': typeof CompteCommandesRouteWithChildren
   '/compte/favoris': typeof CompteFavorisRoute
   '/compte/profil': typeof CompteProfilRoute
+  '/compte/solde': typeof CompteSoldeRoute
   '/produit/$slug': typeof ProduitSlugRoute
   '/compte/': typeof CompteIndexRoute
   '/compte/commandes/$id': typeof CompteCommandesIdRoute
@@ -146,6 +153,7 @@ export interface FileRoutesByTo {
   '/compte/commandes': typeof CompteCommandesRouteWithChildren
   '/compte/favoris': typeof CompteFavorisRoute
   '/compte/profil': typeof CompteProfilRoute
+  '/compte/solde': typeof CompteSoldeRoute
   '/produit/$slug': typeof ProduitSlugRoute
   '/compte': typeof CompteIndexRoute
   '/compte/commandes/$id': typeof CompteCommandesIdRoute
@@ -166,6 +174,7 @@ export interface FileRoutesById {
   '/compte/commandes': typeof CompteCommandesRouteWithChildren
   '/compte/favoris': typeof CompteFavorisRoute
   '/compte/profil': typeof CompteProfilRoute
+  '/compte/solde': typeof CompteSoldeRoute
   '/produit/$slug': typeof ProduitSlugRoute
   '/compte/': typeof CompteIndexRoute
   '/compte/commandes/$id': typeof CompteCommandesIdRoute
@@ -187,6 +196,7 @@ export interface FileRouteTypes {
     | '/compte/commandes'
     | '/compte/favoris'
     | '/compte/profil'
+    | '/compte/solde'
     | '/produit/$slug'
     | '/compte/'
     | '/compte/commandes/$id'
@@ -205,6 +215,7 @@ export interface FileRouteTypes {
     | '/compte/commandes'
     | '/compte/favoris'
     | '/compte/profil'
+    | '/compte/solde'
     | '/produit/$slug'
     | '/compte'
     | '/compte/commandes/$id'
@@ -224,6 +235,7 @@ export interface FileRouteTypes {
     | '/compte/commandes'
     | '/compte/favoris'
     | '/compte/profil'
+    | '/compte/solde'
     | '/produit/$slug'
     | '/compte/'
     | '/compte/commandes/$id'
@@ -329,6 +341,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProduitSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/compte/solde': {
+      id: '/compte/solde'
+      path: '/solde'
+      fullPath: '/compte/solde'
+      preLoaderRoute: typeof CompteSoldeRouteImport
+      parentRoute: typeof CompteRoute
+    }
     '/compte/profil': {
       id: '/compte/profil'
       path: '/profil'
@@ -384,6 +403,7 @@ interface CompteRouteChildren {
   CompteCommandesRoute: typeof CompteCommandesRouteWithChildren
   CompteFavorisRoute: typeof CompteFavorisRoute
   CompteProfilRoute: typeof CompteProfilRoute
+  CompteSoldeRoute: typeof CompteSoldeRoute
   CompteIndexRoute: typeof CompteIndexRoute
 }
 
@@ -392,6 +412,7 @@ const CompteRouteChildren: CompteRouteChildren = {
   CompteCommandesRoute: CompteCommandesRouteWithChildren,
   CompteFavorisRoute: CompteFavorisRoute,
   CompteProfilRoute: CompteProfilRoute,
+  CompteSoldeRoute: CompteSoldeRoute,
   CompteIndexRoute: CompteIndexRoute,
 }
 

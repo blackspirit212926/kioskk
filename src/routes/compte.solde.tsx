@@ -11,7 +11,7 @@ export const Route = createFileRoute("/compte/solde")({
   component: SoldePage,
 });
 
-const OPEN_STATUSES = ["pending_payment", "payment_confirmed", "sourcing", "purchased", "in_transit", "arrived", "out_for_delivery"];
+const OPEN_STATUSES = ["pending_payment", "payment_confirmed", "sourcing", "purchased", "in_transit", "arrived", "out_for_delivery"] as const;
 
 function SoldePage() {
   const { user } = useAuth();
