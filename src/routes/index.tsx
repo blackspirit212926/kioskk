@@ -136,7 +136,7 @@ function Hero() {
             {Array.from({ length: 5 }).map((_, i) => (
               <Star key={i} className="w-3.5 h-3.5 fill-current" />
             ))}
-            <span className="ml-2 text-sm text-muted-foreground">+100 clients satisfaits</span>
+            <span className="ml-2 text-sm text-background/70">+100 clients satisfaits</span>
           </div>
         </div>
       </div>
