@@ -261,6 +261,32 @@ function ProductPage() {
             </div>
           </div>
 
+          {/* Group buy panel */}
+          {groupBuyActive && (
+            <div className="mt-6 rounded-3xl bg-gradient-to-br from-accent/15 to-accent/5 border border-accent/30 p-5">
+              <div className="flex items-center gap-2 text-accent-foreground">
+                <Users className="w-4 h-4" />
+                <span className="text-xs uppercase tracking-widest font-semibold">Achat groupé</span>
+              </div>
+              <div className="mt-3 flex items-baseline justify-between gap-4">
+                <div className="font-display font-bold text-lg">
+                  {product.group_buy_current} / {product.group_buy_threshold} précommandés
+                </div>
+                {daysLeft !== null && (
+                  <div className="text-xs text-muted-foreground flex items-center gap-1">
+                    <Clock className="w-3 h-3" /> {daysLeft > 0 ? `Encore ${daysLeft} jour${daysLeft > 1 ? "s" : ""}` : "Dernier jour"}
+                  </div>
+                )}
+              </div>
+              <div className="mt-2 h-2 rounded-full bg-background/60 overflow-hidden">
+                <div className="h-full bg-accent transition-all" style={{ width: `${groupBuyPct}%` }} />
+              </div>
+              <p className="text-xs text-muted-foreground mt-3 leading-relaxed">
+                Votre précommande n'est confirmée que si le seuil de {product.group_buy_threshold} est atteint avant l'échéance. Sinon, votre versement est intégralement remboursé.
+              </p>
+            </div>
+          )}
+
           {/* Actions */}
           <div className="mt-6 hidden md:flex flex-row gap-3">{actionButtons}</div>
           <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 glass-panel-strong flex flex-row gap-3 p-4 pb-[calc(1rem+env(safe-area-inset-bottom))]">
