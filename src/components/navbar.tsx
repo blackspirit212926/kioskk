@@ -1,6 +1,6 @@
 import { Link, useLocation, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { Heart, Menu, Search, ShoppingBag, User, X, LogOut, Package } from "lucide-react";
+import { Heart, Menu, Search, ShoppingBag, User, X, LogOut } from "lucide-react";
 import { KioskLogo } from "./kiosk-logo";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
@@ -8,14 +8,6 @@ import { useCart } from "@/contexts/cart-context";
 import { useCurrency } from "@/contexts/currency-context";
 import { useAuth } from "@/hooks/use-auth";
 import { CURRENCY_META, type Currency } from "@/lib/format";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 
 const NAV_LINKS = [
   { to: "/", label: "Accueil" },
@@ -50,76 +42,8 @@ export function Navbar() {
       <header className="max-w-4xl mx-auto flex items-center gap-2 md:gap-4 rounded-full bg-sidebar shadow-2xl pl-4 md:pl-5 pr-2 py-2">
         <KioskLogo variant="dark" />
 
-        <nav className="hidden md:flex items-center gap-1" aria-label="Navigation principale">
-          {NAV_LINKS.map((link) => (
-            <Link
-              key={link.to}
-              to={link.to}
-              aria-current={isActive(link.to) ? "page" : undefined}
-              className={`px-3.5 py-2 text-sm font-medium rounded-full transition-colors ${
-                isActive(link.to) ? "text-sidebar-foreground" : "text-sidebar-foreground/75 hover:text-sidebar-foreground"
-              }`}
-            >
-              {link.label}
-            </Link>
-          ))}
-        </nav>
 
         <div className="flex-1" />
-
-        <ThemeToggle tone="pill" className="hidden md:inline-flex" />
-
-        {/* Currency selector */}
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <button
-              className={`hidden md:inline-flex items-center gap-1.5 px-3 py-2 rounded-full text-sm font-medium text-sidebar-foreground/85 hover:bg-sidebar-foreground/10 hover:text-sidebar-foreground transition-colors`}
-              aria-label={`Devise : ${CURRENCY_META[currency].label}. Changer.`}
-            >
-              <span className="text-base leading-none" aria-hidden="true">{CURRENCY_META[currency].flag}</span>
-              <span>{CURRENCY_META[currency].symbol}</span>
-            </button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="min-w-[180px]">
-            {(Object.keys(CURRENCY_META) as Currency[]).map((c) => (
-              <DropdownMenuItem key={c} onClick={() => setCurrency(c)}>
-                <span className="mr-2" aria-hidden="true">{CURRENCY_META[c].flag}</span>
-                <span className="flex-1">{CURRENCY_META[c].label}</span>
-                <span className="text-muted-foreground text-xs">{CURRENCY_META[c].symbol}</span>
-              </DropdownMenuItem>
-            ))}
-          </DropdownMenuContent>
-        </DropdownMenu>
-
-        <Link to="/catalogue" className={`hidden md:inline-flex ${PILL_ICON_BUTTON}`} aria-label="Rechercher un produit">
-          <Search className="w-4.5 h-4.5" aria-hidden="true" />
-        </Link>
-
-        {user ? (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <button
-                className="hidden md:inline-flex items-center justify-center w-10 h-10 rounded-full bg-accent text-accent-foreground text-sm font-bold hover:opacity-90 transition"
-                aria-label="Ouvrir le menu du compte"
-              >
-                {(user.user_metadata?.full_name || user.email || "?").charAt(0).toUpperCase()}
-              </button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="min-w-[220px]">
-              <DropdownMenuLabel className="truncate">{user.user_metadata?.full_name || user.email}</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem asChild><Link to="/compte"><User className="w-4 h-4 mr-2" aria-hidden="true" /> Mon compte</Link></DropdownMenuItem>
-              <DropdownMenuItem asChild><Link to="/compte/commandes"><Package className="w-4 h-4 mr-2" aria-hidden="true" /> Mes commandes</Link></DropdownMenuItem>
-              <DropdownMenuItem asChild><Link to="/compte/favoris"><Heart className="w-4 h-4 mr-2" aria-hidden="true" /> Favoris</Link></DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => signOut()} className="text-destructive"><LogOut className="w-4 h-4 mr-2" aria-hidden="true" /> Se déconnecter</DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        ) : (
-          <Link to="/connexion" className={`hidden md:inline-flex ${PILL_ICON_BUTTON}`} aria-label="Se connecter à mon compte">
-            <User className="w-4.5 h-4.5" aria-hidden="true" />
-          </Link>
-        )}
 
         <button
           onClick={openDrawer}
@@ -134,17 +58,9 @@ export function Navbar() {
           )}
         </button>
 
-        <Button
-          asChild
-          size="sm"
-          className="hidden sm:inline-flex rounded-full bg-accent text-accent-foreground hover:bg-accent-hover px-5 h-9"
-        >
-          <Link to="/catalogue">Précommander</Link>
-        </Button>
-
         <button
           onClick={() => setMobileOpen((v) => !v)}
-          className={`md:hidden inline-flex ${PILL_ICON_BUTTON}`}
+          className={`inline-flex ${PILL_ICON_BUTTON}`}
           aria-label={mobileOpen ? "Fermer le menu" : "Ouvrir le menu"}
           aria-expanded={mobileOpen}
           aria-controls="mobile-menu"
@@ -154,7 +70,7 @@ export function Navbar() {
       </header>
 
       {mobileOpen && (
-        <div id="mobile-menu" className="md:hidden max-w-4xl mx-auto mt-2 rounded-3xl bg-sidebar shadow-2xl p-3 kiosk-fade-up">
+        <div id="mobile-menu" className="max-w-4xl mx-auto mt-2 rounded-3xl bg-sidebar shadow-2xl p-3 kiosk-fade-up">
 
           <div className="relative mb-2">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-sidebar-foreground/60 pointer-events-none" />
