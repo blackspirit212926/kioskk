@@ -230,6 +230,56 @@ export type Database = {
           },
         ]
       }
+      order_payments: {
+        Row: {
+          admin_note: string | null
+          amount_xof: number
+          confirmed_at: string | null
+          created_at: string
+          id: string
+          kind: Database["public"]["Enums"]["payment_kind"]
+          method: Database["public"]["Enums"]["payment_method"] | null
+          order_id: string
+          proof_url: string | null
+          status: Database["public"]["Enums"]["payment_status"]
+          updated_at: string
+        }
+        Insert: {
+          admin_note?: string | null
+          amount_xof: number
+          confirmed_at?: string | null
+          created_at?: string
+          id?: string
+          kind: Database["public"]["Enums"]["payment_kind"]
+          method?: Database["public"]["Enums"]["payment_method"] | null
+          order_id: string
+          proof_url?: string | null
+          status?: Database["public"]["Enums"]["payment_status"]
+          updated_at?: string
+        }
+        Update: {
+          admin_note?: string | null
+          amount_xof?: number
+          confirmed_at?: string | null
+          created_at?: string
+          id?: string
+          kind?: Database["public"]["Enums"]["payment_kind"]
+          method?: Database["public"]["Enums"]["payment_method"] | null
+          order_id?: string
+          proof_url?: string | null
+          status?: Database["public"]["Enums"]["payment_status"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "order_payments_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       order_status_history: {
         Row: {
           created_at: string
@@ -273,11 +323,14 @@ export type Database = {
           created_at: string
           customer_note: string | null
           delivery_fee_xof: number | null
+          discount_xof: number
           id: string
+          is_group_buy: boolean
           order_number: string
           payment_method: Database["public"]["Enums"]["payment_method"] | null
           payment_proof_url: string | null
           payment_type: Database["public"]["Enums"]["payment_type"]
+          promo_code: string | null
           status: Database["public"]["Enums"]["order_status"]
           subtotal_xof: number
           total_paid_xof: number
@@ -292,11 +345,14 @@ export type Database = {
           created_at?: string
           customer_note?: string | null
           delivery_fee_xof?: number | null
+          discount_xof?: number
           id?: string
+          is_group_buy?: boolean
           order_number: string
           payment_method?: Database["public"]["Enums"]["payment_method"] | null
           payment_proof_url?: string | null
           payment_type?: Database["public"]["Enums"]["payment_type"]
+          promo_code?: string | null
           status?: Database["public"]["Enums"]["order_status"]
           subtotal_xof: number
           total_paid_xof?: number
@@ -311,11 +367,14 @@ export type Database = {
           created_at?: string
           customer_note?: string | null
           delivery_fee_xof?: number | null
+          discount_xof?: number
           id?: string
+          is_group_buy?: boolean
           order_number?: string
           payment_method?: Database["public"]["Enums"]["payment_method"] | null
           payment_proof_url?: string | null
           payment_type?: Database["public"]["Enums"]["payment_type"]
+          promo_code?: string | null
           status?: Database["public"]["Enums"]["order_status"]
           subtotal_xof?: number
           total_paid_xof?: number
@@ -465,6 +524,10 @@ export type Database = {
           description: string | null
           estimated_delivery_days_max: number
           estimated_delivery_days_min: number
+          group_buy_current: number
+          group_buy_deadline: string | null
+          group_buy_enabled: boolean
+          group_buy_threshold: number | null
           id: string
           is_featured: boolean
           name: string
@@ -487,6 +550,10 @@ export type Database = {
           description?: string | null
           estimated_delivery_days_max?: number
           estimated_delivery_days_min?: number
+          group_buy_current?: number
+          group_buy_deadline?: string | null
+          group_buy_enabled?: boolean
+          group_buy_threshold?: number | null
           id?: string
           is_featured?: boolean
           name: string
@@ -509,6 +576,10 @@ export type Database = {
           description?: string | null
           estimated_delivery_days_max?: number
           estimated_delivery_days_min?: number
+          group_buy_current?: number
+          group_buy_deadline?: string | null
+          group_buy_enabled?: boolean
+          group_buy_threshold?: number | null
           id?: string
           is_featured?: boolean
           name?: string
@@ -569,6 +640,90 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      promo_codes: {
+        Row: {
+          active: boolean
+          code: string
+          created_at: string
+          discount_type: Database["public"]["Enums"]["discount_type"]
+          discount_value: number
+          expires_at: string | null
+          id: string
+          max_uses: number | null
+          min_subtotal_xof: number
+          updated_at: string
+          used_count: number
+        }
+        Insert: {
+          active?: boolean
+          code: string
+          created_at?: string
+          discount_type: Database["public"]["Enums"]["discount_type"]
+          discount_value: number
+          expires_at?: string | null
+          id?: string
+          max_uses?: number | null
+          min_subtotal_xof?: number
+          updated_at?: string
+          used_count?: number
+        }
+        Update: {
+          active?: boolean
+          code?: string
+          created_at?: string
+          discount_type?: Database["public"]["Enums"]["discount_type"]
+          discount_value?: number
+          expires_at?: string | null
+          id?: string
+          max_uses?: number | null
+          min_subtotal_xof?: number
+          updated_at?: string
+          used_count?: number
+        }
+        Relationships: []
+      }
+      promo_redemptions: {
+        Row: {
+          amount_saved_xof: number
+          code: string
+          created_at: string
+          id: string
+          order_id: string
+          promo_code_id: string
+        }
+        Insert: {
+          amount_saved_xof: number
+          code: string
+          created_at?: string
+          id?: string
+          order_id: string
+          promo_code_id: string
+        }
+        Update: {
+          amount_saved_xof?: number
+          code?: string
+          created_at?: string
+          id?: string
+          order_id?: string
+          promo_code_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "promo_redemptions_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "promo_redemptions_promo_code_id_fkey"
+            columns: ["promo_code_id"]
+            isOneToOne: false
+            referencedRelation: "promo_codes"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       reviews: {
         Row: {
@@ -644,6 +799,14 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      apply_promo_code: {
+        Args: { _code: string; _subtotal_xof: number }
+        Returns: {
+          discount_xof: number
+          reason: string
+          valid: boolean
+        }[]
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -654,6 +817,7 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "staff" | "customer"
+      discount_type: "percent" | "fixed"
       order_status:
         | "pending_payment"
         | "payment_confirmed"
@@ -666,11 +830,13 @@ export type Database = {
         | "cancelled"
         | "refunded"
       origin_country: "CN" | "AE"
+      payment_kind: "deposit" | "balance" | "full"
       payment_method:
         | "wave"
         | "orange_money"
         | "free_money"
         | "cash_on_delivery"
+      payment_status: "pending" | "confirmed" | "rejected"
       payment_type: "full" | "split_50_50"
       product_status: "draft" | "published" | "archived"
       request_status:
@@ -809,6 +975,7 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "staff", "customer"],
+      discount_type: ["percent", "fixed"],
       order_status: [
         "pending_payment",
         "payment_confirmed",
@@ -822,12 +989,14 @@ export const Constants = {
         "refunded",
       ],
       origin_country: ["CN", "AE"],
+      payment_kind: ["deposit", "balance", "full"],
       payment_method: [
         "wave",
         "orange_money",
         "free_money",
         "cash_on_delivery",
       ],
+      payment_status: ["pending", "confirmed", "rejected"],
       payment_type: ["full", "split_50_50"],
       product_status: ["draft", "published", "archived"],
       request_status: [
