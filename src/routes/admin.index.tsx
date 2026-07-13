@@ -1,10 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
-import { useMemo, useState } from "react";
-import { Loader2, ArrowUpDown, Wallet } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
-import { useCurrency } from "@/contexts/currency-context";
-import { formatPrice } from "@/lib/format";
+import { Wallet } from "lucide-react";
 
 export const Route = createFileRoute("/admin/")({
   component: AdminHome,
