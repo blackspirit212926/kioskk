@@ -99,7 +99,7 @@ export function ProductCard({ product, badge }: { product: ProductCardData; badg
           )}
         </div>
         <div className="mt-1 text-[11px] text-muted-foreground">
-          Livraison ~ {product.estimated_delivery_days_min}–{product.estimated_delivery_days_max} jours
+          {product.shipping_mode === "air" ? "Fret aérien" : "Fret maritime"} · {product.estimated_delivery_days_min}–{product.estimated_delivery_days_max} jours
         </div>
 
         <Button
