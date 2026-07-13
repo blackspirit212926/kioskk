@@ -1,6 +1,6 @@
 import { createFileRoute, Outlet, Link, useLocation, useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
-import { LayoutDashboard, Package, Heart, MapPin, User, LogOut, Loader2 } from "lucide-react";
+import { LayoutDashboard, Package, Heart, MapPin, User, LogOut, Loader2, Wallet } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { toast } from "sonner";
 
@@ -12,6 +12,7 @@ export const Route = createFileRoute("/compte")({
 const NAV: { to: string; label: string; icon: typeof LayoutDashboard; exact?: boolean }[] = [
   { to: "/compte", label: "Tableau de bord", icon: LayoutDashboard, exact: true },
   { to: "/compte/commandes", label: "Mes commandes", icon: Package },
+  { to: "/compte/solde", label: "Mon solde", icon: Wallet },
   { to: "/compte/favoris", label: "Favoris", icon: Heart },
   { to: "/compte/adresses", label: "Adresses", icon: MapPin },
   { to: "/compte/profil", label: "Profil", icon: User },
