@@ -50,20 +50,6 @@ export function Navbar() {
       <header className="max-w-4xl mx-auto flex items-center gap-2 md:gap-4 rounded-full bg-sidebar shadow-2xl pl-4 md:pl-5 pr-2 py-2">
         <KioskLogo variant="dark" />
 
-        <nav className="hidden md:flex items-center gap-1" aria-label="Navigation principale">
-          {NAV_LINKS.map((link) => (
-            <Link
-              key={link.to}
-              to={link.to}
-              aria-current={isActive(link.to) ? "page" : undefined}
-              className={`px-3.5 py-2 text-sm font-medium rounded-full transition-colors ${
-                isActive(link.to) ? "text-sidebar-foreground" : "text-sidebar-foreground/75 hover:text-sidebar-foreground"
-              }`}
-            >
-              {link.label}
-            </Link>
-          ))}
-        </nav>
 
         <div className="flex-1" />
 
