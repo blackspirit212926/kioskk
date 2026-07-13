@@ -14,7 +14,8 @@ function getInitialTheme(): Theme {
   if (typeof window === "undefined") return "light";
   const stored = window.localStorage.getItem(STORAGE_KEY);
   if (stored === "light" || stored === "dark") return stored;
-  return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  // Par défaut : mode clair. L'utilisateur peut basculer manuellement.
+  return "light";
 }
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
@@ -25,14 +26,8 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     window.localStorage.setItem(STORAGE_KEY, theme);
   }, [theme]);
 
-  useEffect(() => {
-    // Suit le système tant que l'utilisateur n'a rien choisi explicitement
-    if (window.localStorage.getItem(STORAGE_KEY)) return;
-    const mq = window.matchMedia("(prefers-color-scheme: dark)");
-    const listener = (e: MediaQueryListEvent) => setThemeState(e.matches ? "dark" : "light");
-    mq.addEventListener("change", listener);
-    return () => mq.removeEventListener("change", listener);
-  }, []);
+  // Mode clair par défaut : on ne suit plus automatiquement le système.
+  // L'utilisateur bascule explicitement via le toggle et son choix est mémorisé.
 
   return (
     <ThemeContext.Provider
