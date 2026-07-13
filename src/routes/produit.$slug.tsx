@@ -1,7 +1,7 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import { Heart, ShoppingBag, Zap, Sparkles, Share2, Truck, ShieldCheck, ArrowLeft, Star } from "lucide-react";
+import { Heart, ShoppingBag, Zap, Sparkles, Share2, Truck, ShieldCheck, ArrowLeft, Star, Users, Clock } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
