@@ -17,9 +17,9 @@ function CartPage() {
 
   if (items.length === 0) {
     return (
-      <div className="container-kiosk py-16 md:py-24 max-w-md mx-auto text-center">
-        <div className="w-20 h-20 rounded-full bg-surface flex items-center justify-center mx-auto">
-          <ShoppingBag className="w-8 h-8 text-muted-foreground" />
+      <div className="container-kiosk py-16 md:py-24 max-w-md mx-auto text-center min-h-[60vh] flex flex-col items-center justify-center">
+        <div className="w-20 h-20 rounded-full bg-surface flex items-center justify-center">
+          <ShoppingBag className="w-8 h-8 text-muted-foreground" aria-hidden="true" />
         </div>
         <h1 className="mt-6 text-2xl md:text-3xl font-display font-bold">Votre panier est vide</h1>
         <p className="mt-3 text-muted-foreground">
@@ -56,12 +56,25 @@ function CartPage() {
                 <div className="mt-2 font-display font-bold">{formatPrice(item.unitPriceXof, currency, rates)}</div>
                 <div className="mt-3 flex items-center gap-3">
                   <div className="inline-flex items-center border border-border rounded-full">
-                    <button onClick={() => updateQuantity(item.productId, item.variantId, item.quantity - 1)} disabled={item.quantity <= 1} className="w-8 h-8 disabled:opacity-40 hover:bg-surface rounded-l-full flex items-center justify-center"><Minus className="w-3 h-3" /></button>
-                    <span className="min-w-7 text-center text-sm">{item.quantity}</span>
-                    <button onClick={() => updateQuantity(item.productId, item.variantId, item.quantity + 1)} className="w-8 h-8 hover:bg-surface rounded-r-full flex items-center justify-center"><Plus className="w-3 h-3" /></button>
+                    <button
+                      onClick={() => updateQuantity(item.productId, item.variantId, item.quantity - 1)}
+                      disabled={item.quantity <= 1}
+                      aria-label={`Diminuer la quantité de ${item.name}`}
+                      className="w-10 h-10 disabled:opacity-40 hover:bg-surface rounded-l-full flex items-center justify-center"
+                    ><Minus className="w-3.5 h-3.5" aria-hidden="true" /></button>
+                    <span className="min-w-8 text-center text-sm tabular-nums" aria-live="polite">{item.quantity}</span>
+                    <button
+                      onClick={() => updateQuantity(item.productId, item.variantId, item.quantity + 1)}
+                      aria-label={`Augmenter la quantité de ${item.name}`}
+                      className="w-10 h-10 hover:bg-surface rounded-r-full flex items-center justify-center"
+                    ><Plus className="w-3.5 h-3.5" aria-hidden="true" /></button>
                   </div>
-                  <button onClick={() => removeItem(item.productId, item.variantId)} className="ml-auto text-sm text-muted-foreground hover:text-destructive inline-flex items-center gap-1">
-                    <Trash2 className="w-3.5 h-3.5" /> Retirer
+                  <button
+                    onClick={() => removeItem(item.productId, item.variantId)}
+                    aria-label={`Retirer ${item.name} du panier`}
+                    className="ml-auto text-sm text-muted-foreground hover:text-destructive inline-flex items-center gap-1 min-h-[40px] px-1"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" aria-hidden="true" /> <span className="hidden sm:inline">Retirer</span>
                   </button>
                 </div>
               </div>

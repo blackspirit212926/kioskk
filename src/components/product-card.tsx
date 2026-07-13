@@ -68,32 +68,34 @@ export function ProductCard({ product, badge }: { product: ProductCardData; badg
       </Link>
 
       <button
-        aria-label={fav ? "Retirer des favoris" : "Ajouter aux favoris"}
+        aria-label={fav ? `Retirer ${product.name} des favoris` : `Ajouter ${product.name} aux favoris`}
+        aria-pressed={fav}
         onClick={(e) => {
           e.preventDefault();
           toggle(product.id, product.name);
         }}
-        className="absolute top-3 right-3 w-9 h-9 rounded-full bg-background/90 backdrop-blur hover:bg-background hover:scale-110 transition-all flex items-center justify-center"
+        className="absolute top-2.5 right-2.5 w-10 h-10 rounded-full bg-background/90 backdrop-blur hover:bg-background hover:scale-110 active:scale-95 transition-all flex items-center justify-center"
       >
         <Heart
           className={`w-4 h-4 transition-all ${fav ? "fill-destructive text-destructive scale-110" : "text-foreground"}`}
+          aria-hidden="true"
         />
       </button>
 
       <div className="p-4 md:p-5">
-        <Link to="/produit/$slug" params={{ slug: product.slug }}>
-          <h3 className="font-semibold text-foreground line-clamp-2 leading-snug group-hover:text-primary transition-colors">
+        <Link to="/produit/$slug" params={{ slug: product.slug }} className="focus-visible:outline-none">
+          <h3 className="font-semibold text-foreground line-clamp-2 leading-snug min-h-[2.6em] group-hover:text-primary transition-colors">
             {product.name}
           </h3>
         </Link>
         <p className="mt-1 text-xs text-muted-foreground line-clamp-1">{product.short_description}</p>
 
-        <div className="mt-3 flex items-baseline gap-2">
-          <span className="font-display font-bold text-lg text-foreground">
+        <div className="mt-3 flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
+          <span className="font-display font-bold text-lg text-foreground whitespace-nowrap tabular-nums">
             {formatPrice(product.price_xof, currency, rates)}
           </span>
           {hasDiscount && (
-            <span className="text-xs text-muted-foreground line-through">
+            <span className="text-xs text-muted-foreground line-through whitespace-nowrap tabular-nums">
               {formatPrice(product.compare_at_price_xof!, currency, rates)}
             </span>
           )}
@@ -105,7 +107,8 @@ export function ProductCard({ product, badge }: { product: ProductCardData; badg
         <Button
           size="sm"
           variant="secondary"
-          className="w-full mt-4 rounded-full h-10 opacity-0 -translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 transition-all"
+          aria-label={`Ajouter ${product.name} au panier`}
+          className="w-full mt-4 rounded-full h-10 md:opacity-0 md:-translate-y-1 md:group-hover:opacity-100 md:group-hover:translate-y-0 md:group-focus-within:opacity-100 md:group-focus-within:translate-y-0 transition-all"
           onClick={(e) => {
             e.preventDefault();
             addItem({

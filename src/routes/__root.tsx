@@ -148,9 +148,10 @@ function RootComponent() {
           <CurrencyProvider>
             <FavoritesProvider>
               <CartProvider>
-                <div className="min-h-screen flex flex-col bg-background pb-24 md:pb-0">
+                <div className="min-h-dvh flex flex-col bg-background pb-28 md:pb-0">
+                  <a href="#main-content" className="skip-link">Aller au contenu principal</a>
                   <Navbar />
-                  <main className="flex-1">
+                  <main id="main-content" tabIndex={-1} className="flex-1 outline-none">
                     <Outlet />
                   </main>
                   <Footer />

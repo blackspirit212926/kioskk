@@ -17,7 +17,7 @@ export function ThemeToggle({
     <button
       onClick={toggleTheme}
       aria-label={theme === "dark" ? "Passer en mode clair" : "Passer en mode sombre"}
-      className={`relative inline-flex items-center justify-center w-10 h-10 rounded-full transition-colors ${toneClass} ${className}`}
+      className={`relative items-center justify-center w-10 h-10 rounded-full transition-colors ${toneClass} ${className || "inline-flex"}`}
     >
       <Sun
         className={`w-4.5 h-4.5 absolute transition-all duration-300 ${
