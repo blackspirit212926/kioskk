@@ -93,15 +93,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "apple-touch-icon", href: "/icon-512.png" },
       { rel: "manifest", href: "/manifest.webmanifest" },
     ],
-    links: [
-      { rel: "stylesheet", href: "https://api.fontshare.com/v2/css?f[]=agrandir@400,500,700&display=swap" },
-      { rel: "stylesheet", href: "https://api.fontshare.com/v2/css?f[]=agrandir-grand@700,800&display=swap" },
-      { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap" },
-      { rel: "stylesheet", href: appCss },
-      { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
-      { rel: "apple-touch-icon", href: "/icon-512.png" },
-      { rel: "manifest", href: "/manifest.webmanifest" },
-    ],
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1, viewport-fit=cover" },
