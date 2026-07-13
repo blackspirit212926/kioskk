@@ -45,15 +45,16 @@ export function Navbar() {
   };
 
   return (
-    <div className="sticky top-4 z-50 px-4">
-      <header className="max-w-4xl mx-auto flex items-center gap-4 rounded-full bg-sidebar shadow-2xl pl-5 pr-2 py-2">
+    <div className="sticky top-3 md:top-4 z-50 px-3 md:px-4">
+      <header className="max-w-4xl mx-auto flex items-center gap-2 md:gap-4 rounded-full bg-sidebar shadow-2xl pl-4 md:pl-5 pr-2 py-2">
         <KioskLogo variant="dark" />
 
-        <nav className="hidden md:flex items-center gap-1">
+        <nav className="hidden md:flex items-center gap-1" aria-label="Navigation principale">
           {NAV_LINKS.map((link) => (
             <Link
               key={link.to}
               to={link.to}
+              aria-current={isActive(link.to) ? "page" : undefined}
               className={`px-3.5 py-2 text-sm font-medium rounded-full transition-colors ${
                 isActive(link.to) ? "text-sidebar-foreground" : "text-sidebar-foreground/75 hover:text-sidebar-foreground"
               }`}
@@ -72,16 +73,16 @@ export function Navbar() {
           <DropdownMenuTrigger asChild>
             <button
               className={`hidden md:inline-flex items-center gap-1.5 px-3 py-2 rounded-full text-sm font-medium text-sidebar-foreground/85 hover:bg-sidebar-foreground/10 hover:text-sidebar-foreground transition-colors`}
-              aria-label="Changer de devise"
+              aria-label={`Devise : ${CURRENCY_META[currency].label}. Changer.`}
             >
-              <span className="text-base leading-none">{CURRENCY_META[currency].flag}</span>
+              <span className="text-base leading-none" aria-hidden="true">{CURRENCY_META[currency].flag}</span>
               <span>{CURRENCY_META[currency].symbol}</span>
             </button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="min-w-[180px]">
             {(Object.keys(CURRENCY_META) as Currency[]).map((c) => (
               <DropdownMenuItem key={c} onClick={() => setCurrency(c)}>
-                <span className="mr-2">{CURRENCY_META[c].flag}</span>
+                <span className="mr-2" aria-hidden="true">{CURRENCY_META[c].flag}</span>
                 <span className="flex-1">{CURRENCY_META[c].label}</span>
                 <span className="text-muted-foreground text-xs">{CURRENCY_META[c].symbol}</span>
               </DropdownMenuItem>
@@ -89,8 +90,8 @@ export function Navbar() {
           </DropdownMenuContent>
         </DropdownMenu>
 
-        <Link to="/catalogue" className={`hidden md:inline-flex ${PILL_ICON_BUTTON}`} aria-label="Recherche">
-          <Search className="w-4.5 h-4.5" />
+        <Link to="/catalogue" className={`hidden md:inline-flex ${PILL_ICON_BUTTON}`} aria-label="Rechercher un produit">
+          <Search className="w-4.5 h-4.5" aria-hidden="true" />
         </Link>
 
         {user ? (
@@ -98,7 +99,7 @@ export function Navbar() {
             <DropdownMenuTrigger asChild>
               <button
                 className="hidden md:inline-flex items-center justify-center w-10 h-10 rounded-full bg-accent text-accent-foreground text-sm font-bold hover:opacity-90 transition"
-                aria-label="Mon compte"
+                aria-label="Ouvrir le menu du compte"
               >
                 {(user.user_metadata?.full_name || user.email || "?").charAt(0).toUpperCase()}
               </button>
@@ -106,23 +107,27 @@ export function Navbar() {
             <DropdownMenuContent align="end" className="min-w-[220px]">
               <DropdownMenuLabel className="truncate">{user.user_metadata?.full_name || user.email}</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem asChild><Link to="/compte"><User className="w-4 h-4 mr-2" /> Mon compte</Link></DropdownMenuItem>
-              <DropdownMenuItem asChild><Link to="/compte/commandes"><Package className="w-4 h-4 mr-2" /> Mes commandes</Link></DropdownMenuItem>
-              <DropdownMenuItem asChild><Link to="/compte/favoris"><Heart className="w-4 h-4 mr-2" /> Favoris</Link></DropdownMenuItem>
+              <DropdownMenuItem asChild><Link to="/compte"><User className="w-4 h-4 mr-2" aria-hidden="true" /> Mon compte</Link></DropdownMenuItem>
+              <DropdownMenuItem asChild><Link to="/compte/commandes"><Package className="w-4 h-4 mr-2" aria-hidden="true" /> Mes commandes</Link></DropdownMenuItem>
+              <DropdownMenuItem asChild><Link to="/compte/favoris"><Heart className="w-4 h-4 mr-2" aria-hidden="true" /> Favoris</Link></DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => signOut()} className="text-destructive"><LogOut className="w-4 h-4 mr-2" /> Se déconnecter</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => signOut()} className="text-destructive"><LogOut className="w-4 h-4 mr-2" aria-hidden="true" /> Se déconnecter</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         ) : (
-          <Link to="/connexion" className={`hidden md:inline-flex ${PILL_ICON_BUTTON}`} aria-label="Mon compte">
-            <User className="w-4.5 h-4.5" />
+          <Link to="/connexion" className={`hidden md:inline-flex ${PILL_ICON_BUTTON}`} aria-label="Se connecter à mon compte">
+            <User className="w-4.5 h-4.5" aria-hidden="true" />
           </Link>
         )}
 
-        <button onClick={openDrawer} className={`relative ${PILL_ICON_BUTTON}`} aria-label={`Panier (${count} article${count > 1 ? "s" : ""})`}>
-          <ShoppingBag className="w-4.5 h-4.5" />
+        <button
+          onClick={openDrawer}
+          className={`relative ${PILL_ICON_BUTTON}`}
+          aria-label={count > 0 ? `Panier, ${count} article${count > 1 ? "s" : ""}` : "Panier vide"}
+        >
+          <ShoppingBag className="w-4.5 h-4.5" aria-hidden="true" />
           {count > 0 && (
-            <span className="absolute -top-0.5 -right-0.5 min-w-5 h-5 px-1 rounded-full bg-accent text-accent-foreground text-[10px] font-bold flex items-center justify-center">
+            <span className="absolute -top-0.5 -right-0.5 min-w-5 h-5 px-1 rounded-full bg-accent text-accent-foreground text-[10px] font-bold flex items-center justify-center" aria-hidden="true">
               {count}
             </span>
           )}
@@ -139,10 +144,11 @@ export function Navbar() {
         <button
           onClick={() => setMobileOpen((v) => !v)}
           className={`md:hidden ${PILL_ICON_BUTTON}`}
-          aria-label="Menu"
+          aria-label={mobileOpen ? "Fermer le menu" : "Ouvrir le menu"}
           aria-expanded={mobileOpen}
+          aria-controls="mobile-menu"
         >
-          {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          {mobileOpen ? <X className="w-5 h-5" aria-hidden="true" /> : <Menu className="w-5 h-5" aria-hidden="true" />}
         </button>
       </header>
 
