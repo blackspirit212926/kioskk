@@ -17,9 +17,9 @@ function CartPage() {
 
   if (items.length === 0) {
     return (
-      <div className="container-kiosk py-16 md:py-24 max-w-md mx-auto text-center">
-        <div className="w-20 h-20 rounded-full bg-surface flex items-center justify-center mx-auto">
-          <ShoppingBag className="w-8 h-8 text-muted-foreground" />
+      <div className="container-kiosk py-16 md:py-24 max-w-md mx-auto text-center min-h-[60vh] flex flex-col items-center justify-center">
+        <div className="w-20 h-20 rounded-full bg-surface flex items-center justify-center">
+          <ShoppingBag className="w-8 h-8 text-muted-foreground" aria-hidden="true" />
         </div>
         <h1 className="mt-6 text-2xl md:text-3xl font-display font-bold">Votre panier est vide</h1>
         <p className="mt-3 text-muted-foreground">
